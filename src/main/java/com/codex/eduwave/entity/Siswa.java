@@ -1,8 +1,12 @@
 package com.codex.eduwave.entity;
 
-import jakarta.persistence.GeneratedValue;
+import com.codex.eduwave.constant.NameTable;
+import com.codex.eduwave.constant.StatusSPP;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Date;
 
 @Getter
 @Setter
@@ -10,9 +14,53 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table
+@Table(name = NameTable.SISWA)
 public class Siswa {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Column(name = "nama")
+    private String nama;
+
+    @Column(name = "NIS")
+    private String nis;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "no_hp")
+    private String noHp;
+
+    @Column(name = "no_hp_ortu")
+    private String noHpOrtu;
+
+    @Column(name = "alamat")
+    private String alamat;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private StatusSPP status;
+
+    @Column(name = "tagihan")
+    private Integer tagihan;
+
+    @Column(name = "is_active")
+    private Boolean isActive;
+
+    @OneToOne
+    @JoinColumn(name = "golongan_id")
+    private Golongan golongan;
+
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "created_at", updatable = false)
+    private Date createdAt;
+
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+
 }
