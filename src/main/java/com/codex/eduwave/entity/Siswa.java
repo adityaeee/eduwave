@@ -20,10 +20,10 @@ public class Siswa {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "nama")
+    @Column(name = "nama", nullable = false)
     private String nama;
 
-    @Column(name = "NIS")
+    @Column(name = "NIS", nullable = false)
     private String nis;
 
     @Column(name = "email")

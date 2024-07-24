@@ -1,10 +1,12 @@
 package com.codex.eduwave.entity;
 
 import com.codex.eduwave.constant.NameTable;
-import com.codex.eduwave.constant.StatusSPP;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Date;
 
 @Getter
 @Setter
@@ -17,4 +19,29 @@ public class Golongan {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Column(name = "golongan")
+    private String golongan;
+
+    @Column(name = "SPP")
+    private Integer spp;
+
+    @ManyToOne
+    @JoinColumn(name = "sekolah_id", nullable = false)
+    private Sekolah sekolah;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "created_at", updatable = false)
+    private Date createdAt;
+
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+
 }
