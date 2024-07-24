@@ -1,6 +1,7 @@
 package com.codex.eduwave.entity;
 
 import com.codex.eduwave.constant.NameTable;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
@@ -20,14 +21,15 @@ public class Golongan {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "golongan")
+    @Column(name = "golongan", nullable = false)
     private String golongan;
 
-    @Column(name = "SPP")
+    @Column(name = "SPP", nullable = false)
     private Integer spp;
 
     @ManyToOne
     @JoinColumn(name = "sekolah_id", nullable = false)
+    @JsonBackReference
     private Sekolah sekolah;
 
     @Column(name = "is_deleted")
