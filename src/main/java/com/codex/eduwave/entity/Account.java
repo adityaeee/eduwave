@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = NameTable.ACCOUNT)
-public class UserAccount implements UserDetails {
+public class Account implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;

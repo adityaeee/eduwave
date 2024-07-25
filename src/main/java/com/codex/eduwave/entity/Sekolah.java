@@ -49,7 +49,7 @@ public class Sekolah {
 
     @OneToOne
     @JoinColumn(name = "account_id")
-    private UserAccount user;
+    private Account account;
 
     @Column(name = "created_by")
     private String createdBy;
