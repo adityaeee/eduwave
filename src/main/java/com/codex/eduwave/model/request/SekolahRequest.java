@@ -21,9 +21,6 @@ public class SekolahRequest {
 
     private String npsn;
 
-    private MultipartFile suratIzinOperasional;
-
-    private MultipartFile sertifikatAkreditasi;
 
     private MultipartFile logo;
 }
