@@ -47,9 +47,9 @@ public class Sekolah {
     @JsonManagedReference
     private List<Golongan> golonganSekolah;
 
-//    @OneToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private UserAccount user;
 
     @Column(name = "created_by")
     private String createdBy;
@@ -66,7 +66,4 @@ public class Sekolah {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "updated_at")
     private Date updatedAt;
-
-
-
 }
