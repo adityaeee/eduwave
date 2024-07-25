@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @Builder
 public class SekolahRequest {
-    private  String name;
+    private  String sekolah;
 
     private String email;
 
@@ -21,6 +21,7 @@ public class SekolahRequest {
 
     private String npsn;
 
-
     private MultipartFile logo;
+
+    private String createdBy;
 }
