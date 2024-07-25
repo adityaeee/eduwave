@@ -32,6 +32,7 @@ public class SekolahServiceImpl implements SekolahService {
                 .npsn(request.getNpsn())
                 .logo(logoUrl)
                 .isDeleted(false)
+                .createdBy(request.getCreatedBy())
                 .build();
       return sekolahRepository.saveAndFlush(sekolah);
 
