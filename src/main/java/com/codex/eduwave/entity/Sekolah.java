@@ -34,12 +34,6 @@ public class Sekolah {
     @Column(name = "NPSN", nullable = false)
     private String npsn;
 
-    @Column(name = "surat_izin_operasional", nullable = false)
-    private String suratIzinOperasional;
-
-    @Column(name = "sertifikat_akreditasi")
-    private String sertifikatAkreditasi;
-
     @Column(name = "logo")
     private String logo;
 
