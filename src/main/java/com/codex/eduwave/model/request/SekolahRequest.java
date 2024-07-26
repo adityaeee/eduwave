@@ -21,6 +21,8 @@ public class SekolahRequest {
 
     private String npsn;
 
+    private String password;
+
     private MultipartFile logo;
 
     private String createdBy;
