@@ -3,6 +3,7 @@ package com.codex.eduwave.controller;
 import com.codex.eduwave.constant.ApiUrl;
 import com.codex.eduwave.entity.Sekolah;
 import com.codex.eduwave.model.request.SekolahRequest;
+import com.codex.eduwave.model.response.BaseResponse;
 import com.codex.eduwave.model.response.CommonResponse;
 import com.codex.eduwave.service.intrface.SekolahService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -22,7 +23,7 @@ public class SekolahController {
 
 
     @PostMapping
-    public ResponseEntity<CommonResponse<Sekolah>> create(
+    public ResponseEntity<BaseResponse> create(
             @RequestPart(name = "logo")MultipartFile logo,
             @RequestPart(name = "sekolah_request") String jsonSekolahRequest
             ){
