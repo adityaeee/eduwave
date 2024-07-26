@@ -4,6 +4,7 @@ import com.codex.eduwave.entity.Account;
 import com.codex.eduwave.entity.Sekolah;
 import com.codex.eduwave.model.request.AuthRequest;
 import com.codex.eduwave.model.request.SekolahRequest;
+import com.codex.eduwave.model.response.SekolahResponse;
 import com.codex.eduwave.repository.SekolahRepository;
 import com.codex.eduwave.service.intrface.AuthService;
 import com.codex.eduwave.service.intrface.ImageService;
@@ -25,7 +26,7 @@ public class SekolahServiceImpl implements SekolahService {
 
 
     @Override
-    public Sekolah createSekolah(SekolahRequest request) {
+    public SekolahResponse createSekolah(SekolahRequest request) {
         String logoUrl = imageService.create(request.getLogo());
         AuthRequest authRequest = AuthRequest.builder()
                 .username(request.getNpsn())
@@ -33,26 +34,55 @@ public class SekolahServiceImpl implements SekolahService {
                 .build();
         Account sekolahAccount = authService.register(authRequest);
 
-        Sekolah sekolah = Sekolah.builder()
-                .createdAt(new Date())
-                .updatedAt(new Date())
-                .sekolah(request.getSekolah())
-                .email(request.getEmail())
-                .noHp(request.getNoHp())
-                .npsn(request.getNpsn())
-                .logo(logoUrl)
-                .account(sekolahAccount)
-                .isDeleted(false)
-                .createdBy(request.getCreatedBy())
+
+        Sekolah sekolah = sekolahRepository.saveAndFlush(
+                Sekolah.builder()
+                        .createdAt(new Date())
+                        .updatedAt(new Date())
+                        .sekolah(request.getSekolah())
+                        .email(request.getEmail())
+                        .noHp(request.getNoHp())
+                        .npsn(request.getNpsn())
+                        .logo(logoUrl)
+                        .account(sekolahAccount)
+                        .isDeleted(false)
+                        .createdBy(request.getCreatedBy())
+                        .build()
+
+        );
+        return SekolahResponse.builder()
+                .id(sekolah.getId())
+                .sekolah(sekolah.getSekolah())
+                .email(sekolah.getEmail())
+                .noHp(sekolah.getNoHp())
+                .npsn(sekolah.getNpsn())
+                .logo(sekolah.getLogo())
+                .golonganSekolah(sekolah.getGolonganSekolah())
+                .role(sekolah.getAccount().getRole().stream().map((role -> {
+                    return role.getRole().toString();
+                })).toList())
+                .createdBy(sekolah.getCreatedBy())
                 .build();
-      return sekolahRepository.saveAndFlush(sekolah);
 
 
 
     }
 
     @Override
-    public Sekolah getById(String id) {
-        return sekolahRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
+    public SekolahResponse getById(String id) {
+        Sekolah sekolah = sekolahRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
+        return  SekolahResponse.builder()
+                .id(sekolah.getId())
+                .sekolah(sekolah.getSekolah())
+                .email(sekolah.getEmail())
+                .noHp(sekolah.getNoHp())
+                .npsn(sekolah.getNpsn())
+                .logo(sekolah.getLogo())
+                .golonganSekolah(sekolah.getGolonganSekolah())
+                .role(sekolah.getAccount().getRole().stream().map((role -> {
+                    return role.getRole().toString();
+                })).toList())
+                .createdBy(sekolah.getCreatedBy())
+                .build();
     }
 }
