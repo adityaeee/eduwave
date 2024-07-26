@@ -69,20 +69,8 @@ public class SekolahServiceImpl implements SekolahService {
     }
 
     @Override
-    public SekolahResponse getById(String id) {
-        Sekolah sekolah = sekolahRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
-        return  SekolahResponse.builder()
-                .id(sekolah.getId())
-                .sekolah(sekolah.getSekolah())
-                .email(sekolah.getEmail())
-                .noHp(sekolah.getNoHp())
-                .npsn(sekolah.getNpsn())
-                .logo(sekolah.getLogo())
-                .golonganSekolah(sekolah.getGolonganSekolah())
-                .role(sekolah.getAccount().getRole().stream().map((role -> {
-                    return role.getRole().toString();
-                })).toList())
-                .createdBy(sekolah.getCreatedBy())
-                .build();
+    public Sekolah getById(String id) {
+      return  sekolahRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
+
     }
 }

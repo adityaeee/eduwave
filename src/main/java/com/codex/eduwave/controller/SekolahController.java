@@ -51,11 +51,25 @@ public class SekolahController {
 
     @GetMapping(path = ApiUrl.PATH_VAR_ID)
     public ResponseEntity<BaseResponse> getById(@PathVariable String id){
-        SekolahResponse sekolah = sekolahService.getById(id);
+        Sekolah sekolah = sekolahService.getById(id);
+
+        SekolahResponse sekolahResponse = SekolahResponse.builder()
+                .id(sekolah.getId())
+                .sekolah(sekolah.getSekolah())
+                .email(sekolah.getEmail())
+                .noHp(sekolah.getNoHp())
+                .npsn(sekolah.getNpsn())
+                .logo(sekolah.getLogo())
+                .golonganSekolah(sekolah.getGolonganSekolah())
+                .role(sekolah.getAccount().getRole().stream().map((role -> {
+                    return role.getRole().toString();
+                })).toList())
+                .createdBy(sekolah.getCreatedBy())
+                .build();
         CommonResponse<SekolahResponse> response = CommonResponse.<SekolahResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("successfully get data")
-                .data(sekolah)
+                .data(sekolahResponse)
                 .build();
 
         return ResponseEntity.ok(response);
