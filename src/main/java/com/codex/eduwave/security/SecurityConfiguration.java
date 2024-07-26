@@ -25,7 +25,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request ->  request
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/sekolah/**").permitAll()
+//                        .requestMatchers("/api/v1/sekolah/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
