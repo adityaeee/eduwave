@@ -5,6 +5,7 @@ import com.codex.eduwave.entity.Sekolah;
 import com.codex.eduwave.model.request.SekolahRequest;
 import com.codex.eduwave.model.response.BaseResponse;
 import com.codex.eduwave.model.response.CommonResponse;
+import com.codex.eduwave.model.response.SekolahResponse;
 import com.codex.eduwave.service.intrface.SekolahService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,13 +28,13 @@ public class SekolahController {
             @RequestPart(name = "logo")MultipartFile logo,
             @RequestPart(name = "sekolah_request") String jsonSekolahRequest
             ){
-        CommonResponse.CommonResponseBuilder<Sekolah> sekolahBuilder = CommonResponse.builder();
+        CommonResponse.CommonResponseBuilder<SekolahResponse> sekolahBuilder = CommonResponse.builder();
         try{
             SekolahRequest sekolahRequest = objectMapper.readValue(jsonSekolahRequest, new TypeReference<SekolahRequest>() {
             });
             sekolahRequest.setLogo(logo);
 
-            Sekolah sekolah = sekolahService.createSekolah(sekolahRequest);
+            SekolahResponse sekolah = sekolahService.createSekolah(sekolahRequest);
             sekolahBuilder.statusCode(HttpStatus.OK.value());
             sekolahBuilder.message("successfully add data");
             sekolahBuilder.data(sekolah);
@@ -49,9 +50,9 @@ public class SekolahController {
     }
 
     @GetMapping(path = ApiUrl.PATH_VAR_ID)
-    public ResponseEntity<CommonResponse<Sekolah>> getById(@PathVariable String id){
-        Sekolah sekolah = sekolahService.getById(id);
-        CommonResponse<Sekolah> response = CommonResponse.<Sekolah>builder()
+    public ResponseEntity<BaseResponse> getById(@PathVariable String id){
+        SekolahResponse sekolah = sekolahService.getById(id);
+        CommonResponse<SekolahResponse> response = CommonResponse.<SekolahResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("successfully get data")
                 .data(sekolah)
