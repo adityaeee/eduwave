@@ -9,6 +9,7 @@ import com.codex.eduwave.repository.SekolahRepository;
 import com.codex.eduwave.service.intrface.AuthService;
 import com.codex.eduwave.service.intrface.ImageService;
 import com.codex.eduwave.service.intrface.SekolahService;
+import com.codex.eduwave.utils.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,10 +24,13 @@ public class SekolahServiceImpl implements SekolahService {
     private final SekolahRepository sekolahRepository;
     private final ImageService imageService;
     private final AuthService authService;
+    private final ValidationUtil validationUtil;
 
 
     @Override
     public SekolahResponse createSekolah(SekolahRequest request) {
+        validationUtil.validate(request);
+
         String logoUrl = imageService.create(request.getLogo());
         AuthRequest authRequest = AuthRequest.builder()
                 .username(request.getNpsn())
