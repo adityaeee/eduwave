@@ -8,5 +8,5 @@ import org.springframework.data.domain.Page;
 public interface SekolahService {
 
     SekolahResponse createSekolah(SekolahRequest request);
-    SekolahResponse getById(String id);
+    Sekolah getById(String id);
 }
