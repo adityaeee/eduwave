@@ -31,7 +31,7 @@ public class ImageServiceImpl implements ImageService {
             Result result = imageKit.upload(fileCreateRequest);
 
             Image image = Image.builder()
-                    .id(result.getFileId())
+                    .fileId(result.getFileId())
                     .url(result.getUrl())
                     .name(result.getName())
                     .size(result.getSize())
@@ -46,14 +46,23 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void delete(String id) {
+    public void deleteFromImageKit(String id) {
         Image image = imageRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Image not found"));
         try {
-            imageKit.deleteFile(image.getId());
-            imageRepository.delete(image);
+            imageKit.deleteFile(image.getFileId());
         }catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to delete image");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
+    }
+
+    @Override
+    public void deleteFromEntity(String id) {
+        Image image = imageRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Image not found"));
+        try {
+            imageRepository.delete(image);
+        }catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to delete image--");
+        }
     }
 }

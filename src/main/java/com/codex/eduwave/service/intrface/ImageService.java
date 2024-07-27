@@ -5,5 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
     Image create(MultipartFile file);
-    void delete(String id);
+    void deleteFromImageKit(String id);
+    void deleteFromEntity(String id);
 }

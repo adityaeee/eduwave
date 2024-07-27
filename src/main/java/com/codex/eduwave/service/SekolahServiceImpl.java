@@ -7,7 +7,6 @@ import com.codex.eduwave.model.request.AuthRequest;
 import com.codex.eduwave.model.request.SekolahRequest;
 import com.codex.eduwave.model.request.UpdateSekolahRequest;
 import com.codex.eduwave.model.response.JwtClaims;
-import com.codex.eduwave.model.response.SekolahResponse;
 import com.codex.eduwave.repository.SekolahRepository;
 import com.codex.eduwave.service.intrface.AuthService;
 import com.codex.eduwave.service.intrface.ImageService;
@@ -16,6 +15,7 @@ import com.codex.eduwave.service.intrface.SekolahService;
 import com.codex.eduwave.utils.ValidationUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,6 +25,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SekolahServiceImpl implements SekolahService {
 
     private final SekolahRepository sekolahRepository;
@@ -92,22 +93,31 @@ public class SekolahServiceImpl implements SekolahService {
     @Override
     public Sekolah update(UpdateSekolahRequest request) {
         Sekolah sekolah = getByidIfExist(request.getId());
+        String idLogoSekolahLama = null;
+
+        if (sekolah.getLogo() != null) {
+            idLogoSekolahLama = sekolah.getLogo().getId();
+        }
 
         sekolah.setSekolah(request.getSekolah());
         sekolah.setEmail(request.getEmail());
         sekolah.setNoHp(request.getNoHp());
-        if(request.getLogo() != null && !request.getLogo().isEmpty()) {
-            if (sekolah.getLogo() != null) {
-                imageService.delete(sekolah.getLogo().getId());
-                Image image = imageService.create(request.getLogo());
-                sekolah.setLogo(image);
-            }
+
+        if (request.getLogo() != null && !request.getLogo().isEmpty()) {
             Image image = imageService.create(request.getLogo());
             sekolah.setLogo(image);
         }
+
         sekolah.setUpdatedAt(new Date());
 
-        return sekolahRepository.saveAndFlush(sekolah);
+        Sekolah updateSekolah = sekolahRepository.saveAndFlush(sekolah);
+
+        if (idLogoSekolahLama != null && !idLogoSekolahLama.equals(sekolah.getLogo().getId())) {
+            imageService.deleteFromImageKit(idLogoSekolahLama);
+            imageService.deleteFromEntity(idLogoSekolahLama);
+        }
+
+        return updateSekolah;
     }
 
     @Override
@@ -115,7 +125,7 @@ public class SekolahServiceImpl implements SekolahService {
         Sekolah sekolah = getByidIfExist(id);
         sekolah.setIsDeleted(true);
 
-        imageService.delete(sekolah.getLogo().getId());
+//        imageService.deleteFromEntity(sekolah.getLogo().getId());
 
         sekolahRepository.saveAndFlush(sekolah);
     }

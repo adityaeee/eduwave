@@ -34,7 +34,8 @@ public class Sekolah {
     @Column(name = "NPSN", nullable = false)
     private String npsn;
 
-    @Column(name = "logo_id")
+    @OneToOne
+    @JoinColumn(name = "logo_id")
     private Image logo;
 
     @OneToMany(mappedBy = "sekolah")

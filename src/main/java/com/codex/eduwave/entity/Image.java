@@ -13,7 +13,11 @@ import lombok.*;
 @Table(name = NameTable.IMAGE)
 public class Image {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Column(name = "file_id")
+    private String fileId;
 
     @Column(name = "name")
     private String name;
