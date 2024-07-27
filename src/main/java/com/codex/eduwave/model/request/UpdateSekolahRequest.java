@@ -1,6 +1,5 @@
 package com.codex.eduwave.model.request;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SekolahRequest {
+public class UpdateSekolahRequest {
+
+    @NotBlank(message = "Sekolah id is mandatory and cannot be blank")
+    private String id;
+
     @NotBlank(message = "Sekolah is mandatory and cannot be blank")
     private String sekolah;
 

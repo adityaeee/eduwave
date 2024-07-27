@@ -1,5 +1,7 @@
 package com.codex.eduwave.service;
 
+import com.codex.eduwave.entity.Image;
+import com.codex.eduwave.repository.ImageRepository;
 import com.codex.eduwave.service.intrface.ImageService;
 import io.imagekit.sdk.ImageKit;
 import io.imagekit.sdk.models.FileCreateRequest;
@@ -18,18 +20,40 @@ import java.util.UUID;
 public class ImageServiceImpl implements ImageService {
 
     private final ImageKit imageKit;
+    private final ImageRepository imageRepository;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public String create(MultipartFile file) {
+    public Image create(MultipartFile file) {
         try {
             String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
             FileCreateRequest fileCreateRequest = new FileCreateRequest(file.getBytes(), fileName);
             Result result = imageKit.upload(fileCreateRequest);
 
-            return result.getUrl();
+            Image image = Image.builder()
+                    .id(result.getFileId())
+                    .url(result.getUrl())
+                    .name(result.getName())
+                    .size(result.getSize())
+                    .fileType(result.getFileType())
+                    .build();
+
+            return imageRepository.saveAndFlush(image);
+
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to upload image", e);
         }
+    }
+
+    @Override
+    public void delete(String id) {
+        Image image = imageRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Image not found"));
+        try {
+            imageKit.deleteFile(image.getId());
+            imageRepository.delete(image);
+        }catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to delete image");
+        }
+
     }
 }
