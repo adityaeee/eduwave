@@ -32,8 +32,6 @@ public class SekolahResponse {
     @JsonProperty("golongan_sekolah")
     private List<Golongan> golonganSekolah;
 
-    private List<String> role;
-
     @JsonProperty("created_by")
     private String createdBy;
 

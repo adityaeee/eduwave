@@ -1,24 +1,31 @@
 package com.codex.eduwave.service;
 
 import com.codex.eduwave.entity.Account;
+import com.codex.eduwave.entity.Image;
 import com.codex.eduwave.entity.Sekolah;
 import com.codex.eduwave.model.request.AuthRequest;
 import com.codex.eduwave.model.request.SekolahRequest;
-import com.codex.eduwave.model.response.SekolahResponse;
+import com.codex.eduwave.model.request.UpdateSekolahRequest;
+import com.codex.eduwave.model.response.JwtClaims;
 import com.codex.eduwave.repository.SekolahRepository;
 import com.codex.eduwave.service.intrface.AuthService;
 import com.codex.eduwave.service.intrface.ImageService;
+import com.codex.eduwave.service.intrface.JwtService;
 import com.codex.eduwave.service.intrface.SekolahService;
 import com.codex.eduwave.utils.ValidationUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SekolahServiceImpl implements SekolahService {
 
     private final SekolahRepository sekolahRepository;
@@ -26,18 +33,30 @@ public class SekolahServiceImpl implements SekolahService {
     private final AuthService authService;
     private final ValidationUtil validationUtil;
 
+    final String AUTO_HEADER = "Authorization";
+    private final HttpServletRequest httpServletRequest;
+    private final JwtService jwtService;
 
     @Override
-    public SekolahResponse createSekolah(SekolahRequest request) {
+    public List<Sekolah> getAllSekolah() {
+        List<Sekolah> listSekolah = sekolahRepository.findByIsDeletedFalse();
+        return listSekolah;
+
+    }
+
+    @Override
+    public Sekolah createSekolah(SekolahRequest request) {
         validationUtil.validate(request);
 
-        String logoUrl = imageService.create(request.getLogo());
+        Image logoUrl = imageService.create(request.getLogo());
         AuthRequest authRequest = AuthRequest.builder()
                 .username(request.getNpsn())
                 .password(request.getPassword())
                 .build();
         Account sekolahAccount = authService.register(authRequest);
 
+        String bearerToken = httpServletRequest.getHeader(AUTO_HEADER);
+        JwtClaims jwtClaims = jwtService.getClaimsByToken(bearerToken);
 
         Sekolah sekolah = sekolahRepository.saveAndFlush(
                 Sekolah.builder()
@@ -50,11 +69,11 @@ public class SekolahServiceImpl implements SekolahService {
                         .logo(logoUrl)
                         .account(sekolahAccount)
                         .isDeleted(false)
-                        .createdBy(request.getCreatedBy())
+                        .createdBy(jwtClaims.getAccountId())
                         .build()
 
         );
-        return SekolahResponse.builder()
+        return Sekolah.builder()
                 .id(sekolah.getId())
                 .sekolah(sekolah.getSekolah())
                 .email(sekolah.getEmail())
@@ -62,19 +81,63 @@ public class SekolahServiceImpl implements SekolahService {
                 .npsn(sekolah.getNpsn())
                 .logo(sekolah.getLogo())
                 .golonganSekolah(sekolah.getGolonganSekolah())
-                .role(sekolah.getAccount().getRole().stream().map((role -> {
-                    return role.getRole().toString();
-                })).toList())
                 .createdBy(sekolah.getCreatedBy())
                 .build();
-
-
-
     }
 
     @Override
     public Sekolah getById(String id) {
-      return  sekolahRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
+       return getByidIfExist(id);
+    }
 
+    @Override
+    public Sekolah update(UpdateSekolahRequest request) {
+        Sekolah sekolah = getByidIfExist(request.getId());
+        String idLogoSekolahLama = null;
+
+        if (sekolah.getLogo() != null) {
+            idLogoSekolahLama = sekolah.getLogo().getId();
+        }
+
+        sekolah.setSekolah(request.getSekolah());
+        sekolah.setEmail(request.getEmail());
+        sekolah.setNoHp(request.getNoHp());
+
+        if (request.getLogo() != null && !request.getLogo().isEmpty()) {
+            Image image = imageService.create(request.getLogo());
+            sekolah.setLogo(image);
+        }
+
+        sekolah.setUpdatedAt(new Date());
+
+        Sekolah updateSekolah = sekolahRepository.saveAndFlush(sekolah);
+
+        if (idLogoSekolahLama != null && !idLogoSekolahLama.equals(sekolah.getLogo().getId())) {
+            imageService.deleteFromImageKit(idLogoSekolahLama);
+            imageService.deleteFromEntity(idLogoSekolahLama);
+        }
+
+        return updateSekolah;
+    }
+
+    @Override
+    public void delete(String id) {
+        Sekolah sekolah = getByidIfExist(id);
+        sekolah.setIsDeleted(true);
+
+//        imageService.deleteFromEntity(sekolah.getLogo().getId());
+
+        sekolahRepository.saveAndFlush(sekolah);
+    }
+
+
+    private Sekolah getByidIfExist(String id) {
+        Sekolah sekolah = sekolahRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
+
+        if(sekolah.getIsDeleted()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found");
+        }
+
+        return sekolah;
     }
 }

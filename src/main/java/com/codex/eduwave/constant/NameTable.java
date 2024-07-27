@@ -8,5 +8,5 @@ public class NameTable {
     public static final String ROLE = "role";
     public static final String TRANSAKSI = "transaksi";
     public static final String PAYMENT = "payment";
-
+    public static final String IMAGE = "image";
 }
