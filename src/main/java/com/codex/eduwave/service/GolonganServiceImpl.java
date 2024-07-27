@@ -7,6 +7,7 @@ import com.codex.eduwave.model.response.SekolahResponse;
 import com.codex.eduwave.repository.GolonganRepository;
 import com.codex.eduwave.service.intrface.GolonganService;
 import com.codex.eduwave.service.intrface.SekolahService;
+import com.codex.eduwave.utils.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,12 @@ public class GolonganServiceImpl implements GolonganService {
 
     private final GolonganRepository golonganRepository;
     private final SekolahService sekolahService;
+    private final ValidationUtil validationUtil;
 
 
     @Override
     public Golongan create(GolonganRequest request) {
+        validationUtil.validate(request);
         Sekolah sekolah = sekolahService.getById(request.getSekolahId());
 
        return golonganRepository.saveAndFlush(

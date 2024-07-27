@@ -7,6 +7,7 @@ import com.codex.eduwave.model.request.SiswaRequest;
 import com.codex.eduwave.repository.SiswaRepository;
 import com.codex.eduwave.service.intrface.GolonganService;
 import com.codex.eduwave.service.intrface.SiswaService;
+import com.codex.eduwave.utils.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,12 @@ import java.util.Date;
 public class SiswaServiceImpl implements SiswaService {
     private final SiswaRepository siswaRepository;
     private final GolonganService golonganService;
+    private final ValidationUtil validationUtil;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Siswa create(SiswaRequest request) {
+        validationUtil.validate(request);
         Golongan golongan = golonganService.getById(request.getGolonganId());
 
 
