@@ -36,7 +36,7 @@ public class SiswaServiceImpl implements SiswaService {
                .noHpOrtu(request.getNoHpOrtu())
                .alamat(request.getAlamat())
                .status(StatusSPP.LUNAS)
-               .tagihan(request.getTagihan())
+               .tagihan(0)
                .isActive(true)
                .golongan(golongan)
                .createdAt(new Date())

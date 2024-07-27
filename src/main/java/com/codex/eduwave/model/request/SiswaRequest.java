@@ -17,7 +17,6 @@ public class SiswaRequest {
     private String noHp;
     private String noHpOrtu;
     private String alamat;
-    private Integer tagihan;
     private String golonganId;
 
 
