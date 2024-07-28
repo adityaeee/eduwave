@@ -42,7 +42,7 @@ public class Sekolah {
     @JsonManagedReference
     private List<Golongan> golonganSekolah;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 

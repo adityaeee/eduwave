@@ -6,6 +6,5 @@ import org.springframework.stereotype.Service;
 
 public interface AccountService extends UserDetailsService {
     Account getByAccountId (String id);
-
     Account getByContent();
 }
