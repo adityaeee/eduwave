@@ -14,5 +14,6 @@ public interface SekolahService {
     Sekolah getById(String id);
     Sekolah update(UpdateSekolahRequest sekolah);
     void delete(String id);
+    Sekolah getSekolahByAccountId(String accountId);
 
 }

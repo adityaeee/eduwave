@@ -8,10 +8,7 @@ import com.codex.eduwave.model.request.SekolahRequest;
 import com.codex.eduwave.model.request.UpdateSekolahRequest;
 import com.codex.eduwave.model.response.JwtClaims;
 import com.codex.eduwave.repository.SekolahRepository;
-import com.codex.eduwave.service.intrface.AuthService;
-import com.codex.eduwave.service.intrface.ImageService;
-import com.codex.eduwave.service.intrface.JwtService;
-import com.codex.eduwave.service.intrface.SekolahService;
+import com.codex.eduwave.service.intrface.*;
 import com.codex.eduwave.utils.ValidationUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +29,7 @@ public class SekolahServiceImpl implements SekolahService {
     private final SekolahRepository sekolahRepository;
     private final ImageService imageService;
     private final AuthService authService;
+    private final AccountService accountService;
     private final ValidationUtil validationUtil;
 
     final String AUTO_HEADER = "Authorization";
@@ -58,6 +57,8 @@ public class SekolahServiceImpl implements SekolahService {
         String bearerToken = httpServletRequest.getHeader(AUTO_HEADER);
         JwtClaims jwtClaims = jwtService.getClaimsByToken(bearerToken);
 
+        Account accountCreated = accountService.getByAccountId(jwtClaims.getAccountId());
+
         Sekolah sekolah = sekolahRepository.saveAndFlush(
                 Sekolah.builder()
                         .createdAt(new Date())
@@ -69,7 +70,7 @@ public class SekolahServiceImpl implements SekolahService {
                         .logo(logoUrl)
                         .account(sekolahAccount)
                         .isDeleted(false)
-                        .createdBy(jwtClaims.getAccountId())
+                        .createdBy(accountCreated.getUsername())
                         .build()
 
         );
@@ -125,9 +126,12 @@ public class SekolahServiceImpl implements SekolahService {
         Sekolah sekolah = getByidIfExist(id);
         sekolah.setIsDeleted(true);
 
-//        imageService.deleteFromEntity(sekolah.getLogo().getId());
-
         sekolahRepository.saveAndFlush(sekolah);
+    }
+
+    @Override
+    public Sekolah getSekolahByAccountId(String accountId) {
+      return sekolahRepository.findByAccountId(accountId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data sekolah not found"));
     }
 
 

@@ -19,7 +19,4 @@ public class GolonganRequest {
 
     @NotNull(message = "spp is mandatory and cannot be null")
     private Integer spp;
-
-    @NotBlank(message = "sekolahId is mandatory and cannot be blank")
-    private String sekolahId;
 }

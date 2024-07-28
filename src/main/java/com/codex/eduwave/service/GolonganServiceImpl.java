@@ -4,11 +4,14 @@ import com.codex.eduwave.entity.Golongan;
 import com.codex.eduwave.entity.Sekolah;
 import com.codex.eduwave.model.request.GolonganRequest;
 import com.codex.eduwave.model.request.UpdateGolonganRequest;
+import com.codex.eduwave.model.response.JwtClaims;
 import com.codex.eduwave.model.response.SekolahResponse;
 import com.codex.eduwave.repository.GolonganRepository;
 import com.codex.eduwave.service.intrface.GolonganService;
+import com.codex.eduwave.service.intrface.JwtService;
 import com.codex.eduwave.service.intrface.SekolahService;
 import com.codex.eduwave.utils.ValidationUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,11 +29,19 @@ public class GolonganServiceImpl implements GolonganService {
     private final SekolahService sekolahService;
     private final ValidationUtil validationUtil;
 
+    final String AUTO_HEADER = "Authorization";
+    private final HttpServletRequest httpServletRequest;
+    private final JwtService jwtService;
+
 
     @Override
     public Golongan create(GolonganRequest request) {
         validationUtil.validate(request);
-        Sekolah sekolah = sekolahService.getById(request.getSekolahId());
+
+        String bearerToken = httpServletRequest.getHeader(AUTO_HEADER);
+        JwtClaims jwtClaims = jwtService.getClaimsByToken(bearerToken);
+
+        Sekolah sekolah = sekolahService.getSekolahByAccountId(jwtClaims.getAccountId());
 
        return golonganRepository.saveAndFlush(
                Golongan.builder()
