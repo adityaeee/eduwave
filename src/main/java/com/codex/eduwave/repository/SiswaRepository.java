@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface SiswaRepository extends JpaRepository<Siswa, String> {
-    List<Siswa> findByIsDeletedFalse();
+
 }
