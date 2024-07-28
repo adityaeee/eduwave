@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class SearchSiswaRequest {
-    private String name;
+    private String nama;
     private String nis;
     private Integer tagihan;
     private Boolean isActive;

@@ -13,8 +13,11 @@ public class SiswaSpecification {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (request.getName() != null) {
-                Predicate namePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + request.getName().toLowerCase() + "%");
+            Predicate sekolahPredicate = criteriaBuilder.equal(root.get("golongan").get("sekolah").get("id"), request.getSekolahId());
+            predicates.add(sekolahPredicate);
+
+            if (request.getNama() != null) {
+                Predicate namePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + request.getNama().toLowerCase() + "%");
                 predicates.add(namePredicate);
             }
 

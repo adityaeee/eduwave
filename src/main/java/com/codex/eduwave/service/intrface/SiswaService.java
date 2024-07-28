@@ -12,7 +12,7 @@ import java.util.List;
 public interface SiswaService {
     Siswa create(SiswaRequest request);
     Siswa getById(String id);
-    Page<SiswaResponse> getAll(SearchSiswaRequest request);
+    Page<Siswa> getAll(SearchSiswaRequest request);
     Siswa update(UpdateSiswaRequest request);
     void inActive(String id);
     List<Siswa> updateStatusBulk(List<Siswa> requests);
