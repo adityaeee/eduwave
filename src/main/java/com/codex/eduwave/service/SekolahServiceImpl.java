@@ -4,15 +4,22 @@ import com.codex.eduwave.entity.Account;
 import com.codex.eduwave.entity.Image;
 import com.codex.eduwave.entity.Sekolah;
 import com.codex.eduwave.model.request.AuthRequest;
+import com.codex.eduwave.model.request.SearchSekolahRequest;
 import com.codex.eduwave.model.request.SekolahRequest;
 import com.codex.eduwave.model.request.UpdateSekolahRequest;
 import com.codex.eduwave.model.response.JwtClaims;
 import com.codex.eduwave.repository.SekolahRepository;
 import com.codex.eduwave.service.intrface.*;
+import com.codex.eduwave.specification.SekolahSpecification;
 import com.codex.eduwave.utils.ValidationUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -37,9 +44,27 @@ public class SekolahServiceImpl implements SekolahService {
     private final JwtService jwtService;
 
     @Override
-    public List<Sekolah> getAllSekolah() {
-        List<Sekolah> listSekolah = sekolahRepository.findByIsDeletedFalse();
-        return listSekolah;
+    public Page<Sekolah> getAllSekolah(SearchSekolahRequest request) {
+
+        if (request.getPage()<= 0){
+            request.setPage(1);
+        }
+
+        String validSortBy;
+        if ("sekolah".equalsIgnoreCase(request.getSortBy()) || "npsn".equalsIgnoreCase(request.getSortBy())){
+            validSortBy = request.getSortBy();
+        }else {
+            validSortBy = "sekolah";
+        }
+
+        Sort sort = Sort.by(Sort.Direction.fromString(request.getDirection()), validSortBy);
+
+        Pageable pageable = PageRequest.of((request.getPage() - 1), request.getSize(), sort);
+
+        Specification<Sekolah> spesification = SekolahSpecification.getSpesification(request);
+
+       return sekolahRepository.findAll(spesification,pageable);
+
 
     }
 

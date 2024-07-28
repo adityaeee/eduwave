@@ -2,16 +2,15 @@ package com.codex.eduwave.controller;
 
 import com.codex.eduwave.constant.ApiUrl;
 import com.codex.eduwave.entity.Sekolah;
+import com.codex.eduwave.model.request.SearchSekolahRequest;
 import com.codex.eduwave.model.request.SekolahRequest;
 import com.codex.eduwave.model.request.UpdateSekolahRequest;
-import com.codex.eduwave.model.response.BaseResponse;
-import com.codex.eduwave.model.response.CommonResponse;
-import com.codex.eduwave.model.response.CommonResponseWithPage;
-import com.codex.eduwave.model.response.SekolahResponse;
+import com.codex.eduwave.model.response.*;
 import com.codex.eduwave.service.intrface.SekolahService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +27,37 @@ public class SekolahController {
 
 
     @GetMapping
-    public ResponseEntity<BaseResponse> getAllDataSekolah() {
-        List<Sekolah> allSekolah = sekolahService.getAllSekolah();
+    public ResponseEntity<BaseResponse> getAllDataSekolah(
 
-        List<SekolahResponse> listSekolahResponse = allSekolah.stream().map(
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
+            @RequestParam(name = "size", defaultValue = "10") Integer size,
+            @RequestParam(name = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(name = "direction", defaultValue = "asc") String direction,
+            @RequestParam(name = "sekolah",required = false) String sekolahParam,
+            @RequestParam(name = "npsn",required = false) String npsn
+
+    ) {
+
+        SearchSekolahRequest searchSekolahRequest = SearchSekolahRequest.builder()
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .direction(direction)
+                .sekolah(sekolahParam)
+                .npsn(npsn)
+                .build();
+        Page<Sekolah> allSekolah = sekolahService.getAllSekolah(searchSekolahRequest);
+
+        PagingResponse pagingResponse = PagingResponse.builder()
+                .totalPages(allSekolah.getTotalPages())
+                .totalElements(allSekolah.getTotalElements())
+                .page(allSekolah.getPageable().getPageNumber()+1)
+                .size(allSekolah.getPageable().getPageSize())
+                .hasNext(allSekolah.hasNext())
+                .hasPrevious(allSekolah.hasPrevious())
+                .build();
+
+        List<SekolahResponse> listSekolahResponse = allSekolah.getContent().stream().map(
                 sekolah -> {
                     return SekolahResponse.builder()
                             .id(sekolah.getId())
@@ -50,6 +76,7 @@ public class SekolahController {
                 .statusCode(HttpStatus.OK.value())
                 .message("Successfully get data sekolah")
                 .data(listSekolahResponse)
+                .paging(pagingResponse)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
