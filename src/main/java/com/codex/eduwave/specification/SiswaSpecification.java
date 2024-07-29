@@ -17,7 +17,7 @@ public class SiswaSpecification {
             predicates.add(sekolahPredicate);
 
             if (request.getNama() != null) {
-                Predicate namePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + request.getNama().toLowerCase() + "%");
+                Predicate namePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("nama")), "%" + request.getNama().toLowerCase() + "%");
                 predicates.add(namePredicate);
             }
 
@@ -39,6 +39,11 @@ public class SiswaSpecification {
             if (request.getTagihan() != null) {
                 Predicate tagihanPredicate = criteriaBuilder.lessThanOrEqualTo(root.get("tagihan"), request.getTagihan());
                 predicates.add(tagihanPredicate);
+            }
+
+            if (request.getGolongan() != null) {
+                Predicate golonganPredicate = criteriaBuilder.equal(root.get("golongan").get("id"), request.getGolongan());
+                predicates.add(golonganPredicate);
             }
 
             return query.where(predicates.toArray(new Predicate[]{})).getRestriction();

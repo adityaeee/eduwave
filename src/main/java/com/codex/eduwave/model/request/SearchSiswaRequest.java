@@ -16,6 +16,7 @@ public class SearchSiswaRequest {
     private Boolean isActive;
     private String status;
     private String sekolahId;
+    private String golongan;
 
     private Integer page;
     private Integer size;

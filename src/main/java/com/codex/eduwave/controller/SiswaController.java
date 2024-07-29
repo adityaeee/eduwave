@@ -29,6 +29,7 @@ public class SiswaController {
             @RequestParam(name = "tagihan", required = false) Integer tagihan,
             @RequestParam(name = "isActive", required = false) Boolean isActive,
             @RequestParam(name = "status", required = false) String status,
+            @RequestParam(name = "golongan", required = false) String golongan,
             @RequestParam(name = "size", defaultValue = "10") Integer size,
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "sortBy", defaultValue = "nama") String sortBy,
@@ -39,6 +40,7 @@ public class SiswaController {
                 .nis(nis)
                 .status(status)
                 .tagihan(tagihan)
+                .golongan(golongan)
                 .isActive(isActive)
                 .size(size)
                 .page(page)
