@@ -3,6 +3,7 @@ package com.codex.eduwave.service;
 import com.codex.eduwave.entity.Golongan;
 import com.codex.eduwave.entity.Sekolah;
 import com.codex.eduwave.model.request.GolonganRequest;
+import com.codex.eduwave.model.request.SearchGolonganRequest;
 import com.codex.eduwave.model.request.UpdateGolonganRequest;
 import com.codex.eduwave.model.response.JwtClaims;
 import com.codex.eduwave.model.response.SekolahResponse;
@@ -10,9 +11,12 @@ import com.codex.eduwave.repository.GolonganRepository;
 import com.codex.eduwave.service.intrface.GolonganService;
 import com.codex.eduwave.service.intrface.JwtService;
 import com.codex.eduwave.service.intrface.SekolahService;
+import com.codex.eduwave.specification.GolonganSpecification;
+import com.codex.eduwave.specification.SekolahSpecification;
 import com.codex.eduwave.utils.ValidationUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -62,8 +66,10 @@ public class GolonganServiceImpl implements GolonganService {
     }
 
     @Override
-    public List<Golongan> getAll() {
-        List<Golongan> listGolongan = golonganRepository.findByIsDeletedFalse();
+    public List<Golongan> getAll(SearchGolonganRequest request)  {
+
+        Specification<Golongan> spesification = GolonganSpecification.getSpesification(request);
+        List<Golongan> listGolongan = golonganRepository.findAll(spesification);
         return listGolongan;
     }
 

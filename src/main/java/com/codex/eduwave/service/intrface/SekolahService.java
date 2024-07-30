@@ -1,6 +1,7 @@
 package com.codex.eduwave.service.intrface;
 
 import com.codex.eduwave.entity.Sekolah;
+import com.codex.eduwave.entity.Siswa;
 import com.codex.eduwave.model.request.SearchSekolahRequest;
 import com.codex.eduwave.model.request.SekolahRequest;
 import com.codex.eduwave.model.request.UpdateSekolahRequest;
