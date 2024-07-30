@@ -1,5 +1,6 @@
 package com.codex.eduwave.model.request;
 
+import com.codex.eduwave.constant.StatusSPP;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,7 @@ public class SearchSiswaRequest {
     private String nis;
     private Integer tagihan;
     private Boolean isActive;
-    private String status;
+    private StatusSPP status;
     private String sekolahId;
     private String golongan;
 

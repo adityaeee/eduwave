@@ -10,7 +10,7 @@ public class TransaksiResponse {
     private String id;
     private Date transDate;
     private SiswaResponse siswa;
-
+    private Integer jumlahBayar;
 //    private PaymentResponse payment;
 
 }

@@ -4,6 +4,7 @@ import com.codex.eduwave.entity.Siswa;
 import com.codex.eduwave.entity.Transaksi;
 import com.codex.eduwave.model.request.TransaksiRequest;
 import com.codex.eduwave.model.request.UpdateTransaksiPembayaranStatusRequest;
+import com.codex.eduwave.model.response.SiswaResponse;
 import com.codex.eduwave.model.response.TransaksiResponse;
 import com.codex.eduwave.repository.TransaksiRepository;
 import com.codex.eduwave.service.intrface.SiswaService;
@@ -27,22 +28,45 @@ public class TransaksiServiceImpl implements TransaksiService {
     @Transactional(rollbackOn = Exception.class)
     @Override
     public TransaksiResponse create(TransaksiRequest request) {
-        Siswa siswa = siswaService.getByNis(request.getNis());
 
-        if(!siswa.getIsActive()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Siswa non active");
+        Siswa checkTagihan = siswaService.getByNis(request.getNis());
+
+        if (checkTagihan.getTagihan() < request.getJumlahBayar()) {
+            request.setJumlahBayar(checkTagihan.getTagihan());
         }
 
+        Siswa siswa = siswaService.updateStatusTagihan(request);
 
-        Transaksi transaksi = Transaksi.builder()
-                .siswa(siswa)
-                .transDate(new Date())
-                
+        Transaksi transaksi = transaksiRepository.saveAndFlush(
+                Transaksi.builder()
+                        .siswa(siswa)
+                        .transDate(new Date())
+                        .jumlahBayar(request.getJumlahBayar())
+                        .build()
+        );
+
+        SiswaResponse siswaResponse = SiswaResponse.builder()
+                .id(siswa.getId())
+                .nama(siswa.getNama())
+                .nis(siswa.getNis())
+                .email(siswa.getEmail())
+                .noHp(siswa.getNoHp())
+                .noHpOrtu(siswa.getNoHpOrtu())
+                .alamat(siswa.getAlamat())
+                .status(siswa.getStatus())
+                .tagihan(siswa.getTagihan())
+                .golongan(siswa.getGolongan().getId())
+                .isActive(siswa.getIsActive())
+                .createdAt(siswa.getCreatedAt())
+                .updatedAt(siswa.getUpdatedAt())
                 .build();
 
-
-        return null;
-
+        return TransaksiResponse.builder()
+                .id(transaksi.getId())
+                .jumlahBayar(request.getJumlahBayar())
+                .transDate(transaksi.getTransDate())
+                .siswa(siswaResponse)
+                .build();
     }
 
     @Override

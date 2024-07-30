@@ -1,6 +1,7 @@
 package com.codex.eduwave.controller;
 
 import com.codex.eduwave.constant.ApiUrl;
+import com.codex.eduwave.constant.StatusSPP;
 import com.codex.eduwave.entity.Siswa;
 import com.codex.eduwave.model.request.SearchSiswaRequest;
 import com.codex.eduwave.model.request.SiswaRequest;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,13 +30,14 @@ public class SiswaController {
             @RequestParam(name = "nis", required = false) String nis,
             @RequestParam(name = "tagihan", required = false) Integer tagihan,
             @RequestParam(name = "isActive", required = false) Boolean isActive,
-            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(name = "status", required = false) StatusSPP status,
             @RequestParam(name = "golongan", required = false) String golongan,
             @RequestParam(name = "size", defaultValue = "10") Integer size,
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "sortBy", defaultValue = "nama") String sortBy,
             @RequestParam(name = "direction", defaultValue = "asc") String direction
     ) {
+
         SearchSiswaRequest request = SearchSiswaRequest.builder()
                 .nama(nama)
                 .nis(nis)

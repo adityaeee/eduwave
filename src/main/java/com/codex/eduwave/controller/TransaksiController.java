@@ -26,7 +26,7 @@ public class TransaksiController {
 
         BaseResponse baseResponse = CommonResponse.builder()
                 .statusCode(HttpStatus.OK.value())
-                .message("Successfully create transaktion")
+                .message("Successfully create transaction")
                 .data(transaksi)
                 .build();
 
