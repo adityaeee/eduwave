@@ -3,10 +3,12 @@ package com.codex.eduwave.controller;
 import com.codex.eduwave.constant.ApiUrl;
 import com.codex.eduwave.entity.Golongan;
 import com.codex.eduwave.model.request.GolonganRequest;
+import com.codex.eduwave.model.request.SearchGolonganRequest;
 import com.codex.eduwave.model.request.UpdateGolonganRequest;
 import com.codex.eduwave.model.response.BaseResponse;
 import com.codex.eduwave.model.response.CommonResponse;
 import com.codex.eduwave.model.response.CommonResponseWithPage;
+import com.codex.eduwave.model.response.GolonganResponse;
 import com.codex.eduwave.service.intrface.GolonganService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,10 +28,19 @@ public class GolonganController {
             @RequestBody GolonganRequest request
             ){
         Golongan golongan = golonganService.create(request);
-        BaseResponse response= CommonResponse.<Golongan>builder()
+
+        GolonganResponse golonganResponse = GolonganResponse.builder()
+                .id(golongan.getId())
+                .gologan(golongan.getGolongan())
+                .spp(golongan.getSpp())
+                .createdAt(golongan.getCreatedAt())
+                .updateAt(golongan.getUpdatedAt())
+                .build();
+
+        BaseResponse response= CommonResponse.<GolonganResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("successfully add data")
-                .data(golongan)
+                .data(golonganResponse)
                 .build();
 
         return ResponseEntity.ok(response);
@@ -41,10 +52,20 @@ public class GolonganController {
             @PathVariable String id
     ){
         Golongan golongan = golonganService.getById(id);
-        BaseResponse response= CommonResponse.<Golongan>builder()
+
+
+        GolonganResponse golonganResponse = GolonganResponse.builder()
+                .id(golongan.getId())
+                .gologan(golongan.getGolongan())
+                .spp(golongan.getSpp())
+                .createdAt(golongan.getCreatedAt())
+                .updateAt(golongan.getUpdatedAt())
+                .build();
+
+        BaseResponse response= CommonResponse.<GolonganResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("successfully add data")
-                .data(golongan)
+                .data(golonganResponse)
                 .build();
 
         return ResponseEntity.ok(response);
@@ -52,13 +73,34 @@ public class GolonganController {
     }
 
     @GetMapping
-    public ResponseEntity<BaseResponse> getAll(){
-        List<Golongan> golonganList = golonganService.getAll();
+    public ResponseEntity<BaseResponse> getAll(
+
+            @RequestParam(name = "golongan",required = false) String golongan,
+            @RequestParam(name = "spp", required = false) Integer spp
+    ){
+        SearchGolonganRequest searchGolonganRequest = SearchGolonganRequest.builder()
+                .name(golongan)
+                .spp(spp)
+                .build();
+        List<Golongan> golonganList = golonganService.getAll(searchGolonganRequest);
+
+        List<GolonganResponse> listGolonganResponse = golonganList.stream().map(
+
+                singleGolongan -> {
+                    return GolonganResponse.builder()
+                            .id(singleGolongan.getId())
+                            .gologan(singleGolongan.getGolongan())
+                            .spp(singleGolongan.getSpp())
+                            .createdAt(singleGolongan.getCreatedAt())
+                            .updateAt(singleGolongan.getUpdatedAt())
+                            .build();
+                }
+        ).toList();
 
         BaseResponse response = CommonResponseWithPage.builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("successfully get data")
-                .data(golonganList)
+                .data(listGolonganResponse)
                 .build();
         return ResponseEntity.ok(response);
     }
@@ -70,10 +112,19 @@ public class GolonganController {
 
         Golongan golongan = golonganService.update(request);
 
+
+        GolonganResponse golonganResponse = GolonganResponse.builder()
+                .id(golongan.getId())
+                .gologan(golongan.getGolongan())
+                .spp(golongan.getSpp())
+                .createdAt(golongan.getCreatedAt())
+                .updateAt(golongan.getUpdatedAt())
+                .build();
+
         BaseResponse response = CommonResponse.builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("successfully update data")
-                .data(golongan)
+                .data(golonganResponse)
                 .build();
         return ResponseEntity.ok(response);
     }

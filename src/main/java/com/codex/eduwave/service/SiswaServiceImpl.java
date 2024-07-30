@@ -145,7 +145,20 @@ public class SiswaServiceImpl implements SiswaService {
 
     @Override
     public List<Siswa> updateStatusBulk(List<Siswa> requests) {
-        return siswaRepository.saveAllAndFlush(requests);
+
+        List<Siswa> siswaList = requests.stream().map(
+                siswa -> {
+                    Siswa selectedSiswa = getSiswaOrElseThrowException(siswa.getId());
+
+                    Golongan golongan = golonganService.getById(selectedSiswa.getGolongan().getId());
+
+                    selectedSiswa.setStatus(StatusSPP.BELUM_LUNAS);
+                    selectedSiswa.setTagihan(selectedSiswa.getTagihan() + golongan.getSpp());
+                    return selectedSiswa;
+                }
+        ).toList();
+
+        return siswaRepository.saveAllAndFlush(siswaList);
     }
 
     public Siswa getSiswaOrElseThrowException(String id) {
