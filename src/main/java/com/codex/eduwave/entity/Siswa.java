@@ -23,7 +23,7 @@ public class Siswa {
     @Column(name = "nama", nullable = false)
     private String nama;
 
-    @Column(name = "NIS", nullable = false)
+    @Column(name = "NIS", nullable = false, unique = true)
     private String nis;
 
     @Column(name = "email")

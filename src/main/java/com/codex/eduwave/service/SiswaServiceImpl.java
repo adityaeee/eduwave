@@ -1,15 +1,14 @@
 package com.codex.eduwave.service;
 
 import com.codex.eduwave.constant.StatusSPP;
-import com.codex.eduwave.entity.Account;
 import com.codex.eduwave.entity.Golongan;
 import com.codex.eduwave.entity.Sekolah;
 import com.codex.eduwave.entity.Siswa;
 import com.codex.eduwave.model.request.SearchSiswaRequest;
 import com.codex.eduwave.model.request.SiswaRequest;
+import com.codex.eduwave.model.request.TransaksiRequest;
 import com.codex.eduwave.model.request.UpdateSiswaRequest;
 import com.codex.eduwave.model.response.JwtClaims;
-import com.codex.eduwave.model.response.SiswaResponse;
 import com.codex.eduwave.repository.SiswaRepository;
 import com.codex.eduwave.service.intrface.*;
 import com.codex.eduwave.specification.SiswaSpecification;
@@ -32,6 +31,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SiswaServiceImpl implements SiswaService {
+
     private final SiswaRepository siswaRepository;
     private final GolonganService golonganService;
     private final SekolahService sekolahService;
@@ -93,6 +93,11 @@ public class SiswaServiceImpl implements SiswaService {
     }
 
     @Override
+    public Siswa getByNis(String nis) {
+       return siswaRepository.findByNis(nis).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nis siswa not found"));
+    }
+
+    @Override
     public Siswa update(UpdateSiswaRequest request) {
         Siswa siswa = getSiswaOrElseThrowException(request.getId());
 
@@ -106,6 +111,27 @@ public class SiswaServiceImpl implements SiswaService {
         siswa.setNoHpOrtu(request.getNoHpOrtu());
         siswa.setGolongan(golongan);
         siswa.setUpdatedAt(new Date());
+
+        return siswaRepository.saveAndFlush(siswa);
+    }
+
+    @Override
+    public Siswa updateStatusTagihan(TransaksiRequest request) {
+        Siswa siswa = getByNis(request.getNis());
+
+        if(!siswa.getIsActive()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Siswa non active");
+        }
+
+        int sisaTagihan = siswa.getTagihan() - request.getJumlahBayar();
+
+        if (sisaTagihan <= 0) {
+            sisaTagihan = 0;
+            siswa.setTagihan(sisaTagihan);
+            siswa.setStatus(StatusSPP.LUNAS);
+        } else {
+            siswa.setTagihan(sisaTagihan);
+        }
 
         return siswaRepository.saveAndFlush(siswa);
     }
