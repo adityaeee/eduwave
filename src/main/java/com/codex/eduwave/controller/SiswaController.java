@@ -6,6 +6,7 @@ import com.codex.eduwave.entity.Siswa;
 import com.codex.eduwave.model.request.SearchSiswaRequest;
 import com.codex.eduwave.model.request.SiswaRequest;
 import com.codex.eduwave.model.request.UpdateSiswaRequest;
+import com.codex.eduwave.model.request.UpdateStatusSiswaBulk;
 import com.codex.eduwave.model.response.*;
 import com.codex.eduwave.service.intrface.SiswaService;
 import lombok.RequiredArgsConstructor;
@@ -188,5 +189,30 @@ public class SiswaController {
                 .data(String.format("Students with ID %S are inactive", id))
                 .build();
         return ResponseEntity.ok(response);
+    }
+
+
+
+    @PostMapping(path = "/reset")
+    public ResponseEntity<BaseResponse> resetSiswaStatus(
+            @RequestBody UpdateStatusSiswaBulk request
+    ){
+
+        List<Siswa> list = request.getSiswaId().stream().map(
+                siswa -> {
+
+                    return siswaService.getById(siswa);
+                }
+        ).toList();
+
+        List<Siswa> siswaList = siswaService.updateStatusBulk(list);
+
+        BaseResponse response = CommonResponseWithPage.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("successfully update status")
+                .build();
+
+        return ResponseEntity.ok(response);
+
     }
 }
