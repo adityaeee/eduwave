@@ -32,6 +32,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SiswaServiceImpl implements SiswaService {
+
     private final SiswaRepository siswaRepository;
     private final GolonganService golonganService;
     private final SekolahService sekolahService;
@@ -90,6 +91,11 @@ public class SiswaServiceImpl implements SiswaService {
     @Override
     public Siswa getById(String id) {
         return getSiswaOrElseThrowException(id);
+    }
+
+    @Override
+    public Siswa getByNis(String nis) {
+       return siswaRepository.findByNis(nis).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nis siswa not found"));
     }
 
     @Override

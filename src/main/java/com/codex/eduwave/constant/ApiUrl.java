@@ -11,4 +11,6 @@ public class ApiUrl {
 
     public static final String GOLONGAN_API = BASE_URL + "/golongan";
     public static final String SISWA_API = BASE_URL + "/siswa";
+    public static final String TRANSAKSI_API = BASE_URL + "/transaksi";
+
 }
