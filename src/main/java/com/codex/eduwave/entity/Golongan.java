@@ -3,11 +3,14 @@ package com.codex.eduwave.entity;
 import com.codex.eduwave.constant.NameTable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,6 +34,10 @@ public class Golongan {
     @JoinColumn(name = "sekolah_id", nullable = false)
     @JsonBackReference
     private Sekolah sekolah;
+
+    @OneToMany(mappedBy = "golongan", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Siswa> siswaList;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;

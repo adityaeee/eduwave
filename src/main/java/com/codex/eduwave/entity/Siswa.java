@@ -2,6 +2,7 @@ package com.codex.eduwave.entity;
 
 import com.codex.eduwave.constant.NameTable;
 import com.codex.eduwave.constant.StatusSPP;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
@@ -48,8 +49,9 @@ public class Siswa {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @OneToOne
-    @JoinColumn(name = "golongan_id")
+    @ManyToOne
+    @JoinColumn(name = "golongan_id", nullable = false)
+    @JsonBackReference
     private Golongan golongan;
 
     @Temporal(TemporalType.DATE)
