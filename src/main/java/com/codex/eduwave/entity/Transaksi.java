@@ -29,7 +29,6 @@ public class Transaksi {
     @Column(name = "trans_date", updatable = false)
     private Date transDate;
 
-
     @OneToOne
     @JoinColumn(name = "pembayaran_id", unique = true)
     private Pembayaran pembayaran;
