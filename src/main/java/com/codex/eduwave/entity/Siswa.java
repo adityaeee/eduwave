@@ -30,7 +30,7 @@ public class Siswa {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "no_hp")
+    @Column(name = "no_hp", nullable = false)
     private String noHp;
 
     @Column(name = "no_hp_ortu")

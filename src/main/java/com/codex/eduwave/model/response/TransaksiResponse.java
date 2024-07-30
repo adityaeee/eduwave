@@ -11,6 +11,6 @@ public class TransaksiResponse {
     private Date transDate;
     private SiswaResponse siswa;
     private Integer jumlahBayar;
-//    private PaymentResponse payment;
+    private PembayaranResponse pembayaran;
 
 }
