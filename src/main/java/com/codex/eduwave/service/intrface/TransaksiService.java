@@ -12,8 +12,6 @@ public interface TransaksiService {
 
     List<TransaksiResponse> getAll();
 
-    List<TransaksiResponse> getAllByIdSiswa(String id);
-
     void updateStatus (UpdateTransaksiPembayaranStatusRequest request);
 
 }
