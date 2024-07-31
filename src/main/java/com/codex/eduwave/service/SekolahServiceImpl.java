@@ -25,8 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -112,8 +110,8 @@ public class SekolahServiceImpl implements SekolahService {
     }
 
     @Override
-    public Sekolah getById(String id) {
-       return getByidIfExist(id);
+    public Sekolah getByNpsn(String npsn) {
+       return sekolahRepository.findByNpsn(npsn).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Npsn not found"));
     }
 
     @Override

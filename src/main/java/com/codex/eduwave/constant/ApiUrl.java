@@ -8,6 +8,7 @@ public class ApiUrl {
 
 
     public final static String PATH_VAR_ID =  "/{id}";
+    public final static String PATH_VAR_NPSN =  "/{npsn}";
 
     public static final String GOLONGAN_API = BASE_URL + "/golongan";
     public static final String SISWA_API = BASE_URL + "/siswa";

@@ -12,5 +12,7 @@ import java.util.Optional;
 public interface SekolahRepository  extends JpaRepository<Sekolah,String>, JpaSpecificationExecutor<Sekolah> {
     List<Sekolah> findByIsDeletedFalse();
     Optional<Sekolah> findByAccountId(String accountId);
+    Optional<Sekolah> findByNpsn(String npsn);
+
 
 }
