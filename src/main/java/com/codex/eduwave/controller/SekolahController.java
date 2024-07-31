@@ -120,9 +120,9 @@ public class SekolahController {
         }
     }
 
-    @GetMapping(path = ApiUrl.PATH_VAR_ID)
-    public ResponseEntity<BaseResponse> getById(@PathVariable String id){
-        Sekolah sekolah = sekolahService.getById(id);
+    @GetMapping(path = ApiUrl.PATH_VAR_NPSN)
+    public ResponseEntity<BaseResponse> getById(@PathVariable String npsn){
+        Sekolah sekolah = sekolahService.getByNpsn(npsn);
 
         SekolahResponse sekolahResponse = SekolahResponse.builder()
                 .id(sekolah.getId())
