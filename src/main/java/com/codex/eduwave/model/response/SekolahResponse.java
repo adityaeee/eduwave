@@ -28,9 +28,9 @@ public class SekolahResponse {
     private String npsn;
 
     private String logo;
-
-    @JsonProperty("golongan_sekolah")
-    private List<Golongan> golonganSekolah;
+//
+//    @JsonProperty("golongan_sekolah")
+//    private List<Golongan> golonganSekolah;
 
     @JsonProperty("created_by")
     private String createdBy;

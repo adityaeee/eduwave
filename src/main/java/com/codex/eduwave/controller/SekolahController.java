@@ -66,7 +66,7 @@ public class SekolahController {
                             .noHp(sekolah.getNoHp())
                             .npsn(sekolah.getNpsn())
                             .logo(sekolah.getLogo().getUrl())
-                            .golonganSekolah(sekolah.getGolonganSekolah())
+//                            .golonganSekolah(sekolah.getGolonganSekolah())
                             .createdBy(sekolah.getCreatedBy())
                             .build();
                 }
@@ -102,7 +102,7 @@ public class SekolahController {
                     .noHp(sekolah.getNoHp())
                     .npsn(sekolah.getNpsn())
                     .logo(sekolah.getLogo().getUrl())
-                    .golonganSekolah(sekolah.getGolonganSekolah())
+//                    .golonganSekolah(sekolah.getGolonganSekolah())
                     .createdBy(sekolah.getCreatedBy())
                     .build();
 
@@ -131,7 +131,7 @@ public class SekolahController {
                 .noHp(sekolah.getNoHp())
                 .npsn(sekolah.getNpsn())
                 .logo(sekolah.getLogo().getUrl())
-                .golonganSekolah(sekolah.getGolonganSekolah())
+//                .golonganSekolah(sekolah.getGolonganSekolah())
                 .createdBy(sekolah.getCreatedBy())
                 .build();
         CommonResponse<SekolahResponse> response = CommonResponse.<SekolahResponse>builder()
@@ -162,7 +162,7 @@ public class SekolahController {
                     .noHp(sekolah.getNoHp())
                     .npsn(sekolah.getNpsn())
                     .logo(sekolah.getLogo().getUrl())
-                    .golonganSekolah(sekolah.getGolonganSekolah())
+//                    .golonganSekolah(sekolah.getGolonganSekolah())
                     .createdBy(sekolah.getCreatedBy())
                     .build();
 
