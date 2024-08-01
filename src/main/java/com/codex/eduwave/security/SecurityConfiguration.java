@@ -36,6 +36,10 @@ public class SecurityConfiguration {
                         authenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
                 )
+                .addFilterBefore(
+                        new NgrokSkipBrowserWarning(),
+                        UsernamePasswordAuthenticationFilter.class
+                )
                 .build();
     }
 }
