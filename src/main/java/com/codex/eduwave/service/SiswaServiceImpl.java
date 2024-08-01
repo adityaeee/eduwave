@@ -131,7 +131,7 @@ public class SiswaServiceImpl implements SiswaService {
     @Override
     public void inActive(String id) {
         Siswa siswa = getSiswaOrElseThrowException(id);
-        siswa.setIsActive(false);
+        siswa.setIsActive(!siswa.getIsActive());
         siswa.setUpdatedAt(new Date());
         siswaRepository.saveAndFlush(siswa);
     }

@@ -11,6 +11,7 @@ public interface SekolahService {
     Page<Sekolah> getAllSekolah(SearchSekolahRequest request);
     Sekolah createSekolah(SekolahRequest request);
     Sekolah getByNpsn(String npsn);
+    Sekolah getById(String id);
     Sekolah update(UpdateSekolahRequest sekolah);
     void delete(String id);
     Sekolah getSekolahByAccountId(String accountId);

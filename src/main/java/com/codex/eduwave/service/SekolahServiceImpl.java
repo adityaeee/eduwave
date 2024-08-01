@@ -126,6 +126,11 @@ public class SekolahServiceImpl implements SekolahService {
     }
 
     @Override
+    public Sekolah getById(String id) {
+        return getByidIfExist(id);
+    }
+
+    @Override
     public Sekolah update(UpdateSekolahRequest request) {
         Sekolah sekolah = getByidIfExist(request.getId());
         String idLogoSekolahLama = null;
