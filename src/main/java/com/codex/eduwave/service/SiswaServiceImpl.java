@@ -113,12 +113,8 @@ public class SiswaServiceImpl implements SiswaService {
     }
 
     @Override
-    public Siswa updateStatusTagihan(TransaksiRequest request) {
-        Siswa siswa = getByNis(request.getNis());
-
-        if(!siswa.getIsActive()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Siswa non active");
-        }
+    public Siswa updateStatusTagihan(UpdateStatusTagihanSiswaRequest request) {
+        Siswa siswa = getById(request.getSiswaId());
 
         int sisaTagihan = siswa.getTagihan() - request.getJumlahBayar();
 
@@ -129,7 +125,6 @@ public class SiswaServiceImpl implements SiswaService {
         } else {
             siswa.setTagihan(sisaTagihan);
         }
-
         return siswaRepository.saveAndFlush(siswa);
     }
 
@@ -137,6 +132,7 @@ public class SiswaServiceImpl implements SiswaService {
     public void inActive(String id) {
         Siswa siswa = getSiswaOrElseThrowException(id);
         siswa.setIsActive(false);
+        siswa.setUpdatedAt(new Date());
         siswaRepository.saveAndFlush(siswa);
     }
 

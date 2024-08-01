@@ -72,7 +72,9 @@ public class SiswaController {
                             .alamat(siswa.getAlamat())
                             .status(siswa.getStatus())
                             .tagihan(siswa.getTagihan())
-                            .golongan(siswa.getGolongan().getId())
+                            .golonganId(siswa.getGolongan().getId())
+                            .golongan(siswa.getGolongan().getGolongan())
+                            .spp(siswa.getGolongan().getSpp())
                             .isActive(siswa.getIsActive())
                             .createdAt(siswa.getCreatedAt())
                             .updatedAt(siswa.getUpdatedAt())
@@ -105,7 +107,9 @@ public class SiswaController {
                 .alamat(siswa.getAlamat())
                 .status(siswa.getStatus())
                 .tagihan(siswa.getTagihan())
-                .golongan(siswa.getGolongan().getId())
+                .golonganId(siswa.getGolongan().getId())
+                .golongan(siswa.getGolongan().getGolongan())
+                .spp(siswa.getGolongan().getSpp())
                 .isActive(siswa.getIsActive())
                 .createdAt(siswa.getCreatedAt())
                 .updatedAt(siswa.getUpdatedAt())
@@ -135,7 +139,9 @@ public class SiswaController {
                 .alamat(siswa.getAlamat())
                 .status(siswa.getStatus())
                 .tagihan(siswa.getTagihan())
-                .golongan(siswa.getGolongan().getId())
+                .golonganId(siswa.getGolongan().getId())
+                .golongan(siswa.getGolongan().getGolongan())
+                .spp(siswa.getGolongan().getSpp())
                 .isActive(siswa.getIsActive())
                 .createdAt(siswa.getCreatedAt())
                 .updatedAt(siswa.getUpdatedAt())
@@ -163,7 +169,9 @@ public class SiswaController {
                 .alamat(siswa.getAlamat())
                 .status(siswa.getStatus())
                 .tagihan(siswa.getTagihan())
-                .golongan(siswa.getGolongan().getId())
+                .golonganId(siswa.getGolongan().getId())
+                .golongan(siswa.getGolongan().getGolongan())
+                .spp(siswa.getGolongan().getSpp())
                 .isActive(siswa.getIsActive())
                 .createdAt(siswa.getCreatedAt())
                 .updatedAt(siswa.getUpdatedAt())
@@ -194,10 +202,8 @@ public class SiswaController {
     public ResponseEntity<BaseResponse> resetSiswaStatus(
             @RequestBody UpdateStatusSiswaBulk request
     ){
-
         List<Siswa> list = request.getSiswaId().stream().map(
                 siswa -> {
-
                     return siswaService.getById(siswa);
                 }
         ).toList();
@@ -228,7 +234,9 @@ public class SiswaController {
                 .alamat(siswa.getAlamat())
                 .status(siswa.getStatus())
                 .tagihan(siswa.getTagihan())
-                .golongan(siswa.getGolongan().getId())
+                .golonganId(siswa.getGolongan().getId())
+                .golongan(siswa.getGolongan().getGolongan())
+                .spp(siswa.getGolongan().getSpp())
                 .isActive(siswa.getIsActive())
                 .createdAt(siswa.getCreatedAt())
                 .updatedAt(siswa.getUpdatedAt())

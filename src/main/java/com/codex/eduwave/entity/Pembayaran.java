@@ -24,7 +24,7 @@ public class Pembayaran {
 
     @Column(name = "transaction_status", nullable = false)
     private String transactionStatus;
-//    setllement
+//    settlement
 //    deny
 //    pending
 //    cancel

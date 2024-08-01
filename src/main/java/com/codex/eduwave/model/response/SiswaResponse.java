@@ -42,8 +42,14 @@ public class SiswaResponse {
     @JsonProperty("is_active")
     private Boolean isActive;
 
-    @JsonProperty("golongan_id")
+    @JsonProperty("golongan")
     private String golongan;
+
+    @JsonProperty("golongan_id")
+    private String golonganId;
+
+    @JsonProperty("spp")
+    private Integer spp;
 
     @JsonProperty("created_at")
     private Date createdAt;
