@@ -16,7 +16,7 @@ public class GolonganResponse {
 
     private String id;
 
-    private String gologan;
+    private String golongan;
 
     private Integer spp;
 
