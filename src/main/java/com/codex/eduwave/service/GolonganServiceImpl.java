@@ -68,9 +68,16 @@ public class GolonganServiceImpl implements GolonganService {
     @Override
     public List<Golongan> getAll(SearchGolonganRequest request)  {
 
+        String bearerToken = httpServletRequest.getHeader(AUTO_HEADER);
+        JwtClaims jwtClaims = jwtService.getClaimsByToken(bearerToken);
+
+        Sekolah sekolah = sekolahService.getSekolahByAccountId(jwtClaims.getAccountId());
+
+        request.setSekolahId(sekolah.getId());
+
         Specification<Golongan> spesification = GolonganSpecification.getSpesification(request);
-        List<Golongan> listGolongan = golonganRepository.findAll(spesification);
-        return listGolongan;
+        return golonganRepository.findAll(spesification);
+
     }
 
     @Override
@@ -94,11 +101,7 @@ public class GolonganServiceImpl implements GolonganService {
         golongan.setIsDeleted(true);
 
         golonganRepository.saveAndFlush(golongan);
-
-
     }
-
-
 
     private Golongan getByIdIfExist(String id){
         Golongan golongan = golonganRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));

@@ -85,8 +85,7 @@ public class TransaksiServiceImpl implements TransaksiService {
     }
 
     @Override
-    public List<TransaksiResponse> getAll() {
-
+    public List<TransaksiResponse> getAllByIdSiswa(String siswaId) {
         return List.of();
     }
 

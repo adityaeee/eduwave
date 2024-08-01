@@ -19,4 +19,5 @@ import java.util.List;
 public class SearchGolonganRequest {
     private String name;
     private Integer spp;
+    private String sekolahId;
 }

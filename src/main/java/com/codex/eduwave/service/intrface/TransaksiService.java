@@ -10,7 +10,7 @@ public interface TransaksiService {
 
     TransaksiResponse create (TransaksiRequest request);
 
-    List<TransaksiResponse> getAll();
+    List<TransaksiResponse> getAllByIdSiswa(String siswaId);
 
     void updateStatus (UpdateTransaksiPembayaranStatusRequest request);
 

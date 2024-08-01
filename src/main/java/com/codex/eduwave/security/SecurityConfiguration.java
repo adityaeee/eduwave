@@ -28,8 +28,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/transaksi/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v1/siswa/login").permitAll()
-
-//                        .requestMatchers("/api/v1/sekolah/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/sekolah/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
