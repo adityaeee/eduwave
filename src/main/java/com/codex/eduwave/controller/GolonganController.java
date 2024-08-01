@@ -33,6 +33,7 @@ public class GolonganController {
                 .id(golongan.getId())
                 .gologan(golongan.getGolongan())
                 .spp(golongan.getSpp())
+                .sekolahId(golongan.getSekolah().getId())
                 .createdAt(golongan.getCreatedAt())
                 .updateAt(golongan.getUpdatedAt())
                 .build();
@@ -58,6 +59,7 @@ public class GolonganController {
                 .id(golongan.getId())
                 .gologan(golongan.getGolongan())
                 .spp(golongan.getSpp())
+                .sekolahId(golongan.getSekolah().getId())
                 .createdAt(golongan.getCreatedAt())
                 .updateAt(golongan.getUpdatedAt())
                 .build();
@@ -91,6 +93,7 @@ public class GolonganController {
                             .id(singleGolongan.getId())
                             .gologan(singleGolongan.getGolongan())
                             .spp(singleGolongan.getSpp())
+                            .sekolahId(singleGolongan.getSekolah().getId())
                             .createdAt(singleGolongan.getCreatedAt())
                             .updateAt(singleGolongan.getUpdatedAt())
                             .build();
@@ -117,6 +120,7 @@ public class GolonganController {
                 .id(golongan.getId())
                 .gologan(golongan.getGolongan())
                 .spp(golongan.getSpp())
+                .sekolahId(golongan.getSekolah().getId())
                 .createdAt(golongan.getCreatedAt())
                 .updateAt(golongan.getUpdatedAt())
                 .build();

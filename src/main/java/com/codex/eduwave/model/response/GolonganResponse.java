@@ -20,6 +20,8 @@ public class GolonganResponse {
 
     private Integer spp;
 
+    private String sekolahId;
+
     private Date createdAt;
 
     private Date updateAt;
