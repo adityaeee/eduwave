@@ -31,7 +31,7 @@ public class GolonganController {
 
         GolonganResponse golonganResponse = GolonganResponse.builder()
                 .id(golongan.getId())
-                .gologan(golongan.getGolongan())
+                .golongan(golongan.getGolongan())
                 .spp(golongan.getSpp())
                 .sekolahId(golongan.getSekolah().getId())
                 .createdAt(golongan.getCreatedAt())
@@ -57,7 +57,7 @@ public class GolonganController {
 
         GolonganResponse golonganResponse = GolonganResponse.builder()
                 .id(golongan.getId())
-                .gologan(golongan.getGolongan())
+                .golongan(golongan.getGolongan())
                 .spp(golongan.getSpp())
                 .sekolahId(golongan.getSekolah().getId())
                 .createdAt(golongan.getCreatedAt())
@@ -91,7 +91,7 @@ public class GolonganController {
                 singleGolongan -> {
                     return GolonganResponse.builder()
                             .id(singleGolongan.getId())
-                            .gologan(singleGolongan.getGolongan())
+                            .golongan(singleGolongan.getGolongan())
                             .spp(singleGolongan.getSpp())
                             .sekolahId(singleGolongan.getSekolah().getId())
                             .createdAt(singleGolongan.getCreatedAt())
@@ -118,7 +118,7 @@ public class GolonganController {
 
         GolonganResponse golonganResponse = GolonganResponse.builder()
                 .id(golongan.getId())
-                .gologan(golongan.getGolongan())
+                .golongan(golongan.getGolongan())
                 .spp(golongan.getSpp())
                 .sekolahId(golongan.getSekolah().getId())
                 .createdAt(golongan.getCreatedAt())
