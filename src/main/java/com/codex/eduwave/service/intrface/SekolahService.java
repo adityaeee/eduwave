@@ -4,6 +4,7 @@ import com.codex.eduwave.entity.Sekolah;
 import com.codex.eduwave.model.request.SearchSekolahRequest;
 import com.codex.eduwave.model.request.SekolahRequest;
 import com.codex.eduwave.model.request.UpdateSekolahRequest;
+import com.codex.eduwave.model.response.SekolahByIdResponse;
 import org.springframework.data.domain.Page;
 
 public interface SekolahService {

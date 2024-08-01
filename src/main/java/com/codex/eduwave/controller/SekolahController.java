@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ import java.util.List;
 public class SekolahController {
     private final SekolahService sekolahService;
     private final ObjectMapper objectMapper;
+    private final PasswordEncoder passwordEncoder;
 
 
     @GetMapping
@@ -66,7 +68,6 @@ public class SekolahController {
                             .noHp(sekolah.getNoHp())
                             .npsn(sekolah.getNpsn())
                             .logo(sekolah.getLogo().getUrl())
-                            .golonganSekolah(sekolah.getGolonganSekolah())
                             .createdBy(sekolah.getCreatedBy())
                             .build();
                 }
@@ -102,7 +103,6 @@ public class SekolahController {
                     .noHp(sekolah.getNoHp())
                     .npsn(sekolah.getNpsn())
                     .logo(sekolah.getLogo().getUrl())
-                    .golonganSekolah(sekolah.getGolonganSekolah())
                     .createdBy(sekolah.getCreatedBy())
                     .build();
 
@@ -124,17 +124,19 @@ public class SekolahController {
     public ResponseEntity<BaseResponse> getById(@PathVariable String npsn){
         Sekolah sekolah = sekolahService.getByNpsn(npsn);
 
-        SekolahResponse sekolahResponse = SekolahResponse.builder()
+        SekolahByIdResponse sekolahResponse = SekolahByIdResponse.builder()
                 .id(sekolah.getId())
                 .sekolah(sekolah.getSekolah())
                 .email(sekolah.getEmail())
                 .noHp(sekolah.getNoHp())
                 .npsn(sekolah.getNpsn())
                 .logo(sekolah.getLogo().getUrl())
-                .golonganSekolah(sekolah.getGolonganSekolah())
                 .createdBy(sekolah.getCreatedBy())
+                .createdAt(sekolah.getCreatedAt())
+                .updatedAt(sekolah.getUpdatedAt())
                 .build();
-        CommonResponse<SekolahResponse> response = CommonResponse.<SekolahResponse>builder()
+
+        CommonResponse<SekolahByIdResponse> response = CommonResponse.<SekolahByIdResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("successfully get data")
                 .data(sekolahResponse)
@@ -162,7 +164,6 @@ public class SekolahController {
                     .noHp(sekolah.getNoHp())
                     .npsn(sekolah.getNpsn())
                     .logo(sekolah.getLogo().getUrl())
-                    .golonganSekolah(sekolah.getGolonganSekolah())
                     .createdBy(sekolah.getCreatedBy())
                     .build();
 
