@@ -17,10 +17,16 @@ public class GolonganSpecification {
             List<Predicate> predicates = new ArrayList<>();
 
             predicates.add(
-
                     criteriaBuilder.equal(
                             root.get("isDeleted"),
                             false
+                    )
+            );
+
+            predicates.add(
+                    criteriaBuilder.equal(
+                            root.get("sekolah").get("id"),
+                            request.getSekolahId()
                     )
             );
 

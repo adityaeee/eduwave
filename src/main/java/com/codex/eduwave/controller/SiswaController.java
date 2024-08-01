@@ -3,10 +3,7 @@ package com.codex.eduwave.controller;
 import com.codex.eduwave.constant.ApiUrl;
 import com.codex.eduwave.constant.StatusSPP;
 import com.codex.eduwave.entity.Siswa;
-import com.codex.eduwave.model.request.SearchSiswaRequest;
-import com.codex.eduwave.model.request.SiswaRequest;
-import com.codex.eduwave.model.request.UpdateSiswaRequest;
-import com.codex.eduwave.model.request.UpdateStatusSiswaBulk;
+import com.codex.eduwave.model.request.*;
 import com.codex.eduwave.model.response.*;
 import com.codex.eduwave.service.intrface.SiswaService;
 import lombok.RequiredArgsConstructor;
@@ -182,7 +179,7 @@ public class SiswaController {
 
     @DeleteMapping(path = ApiUrl.PATH_VAR_ID)
     public ResponseEntity<BaseResponse> inActiveSiswa (@PathVariable String id){
-        siswaService.getById(id);
+        siswaService.inActive(id);
         BaseResponse response = CommonResponse.<String>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("Student data that was successfully changed to be inactive")
@@ -214,5 +211,34 @@ public class SiswaController {
 
         return ResponseEntity.ok(response);
 
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<BaseResponse> loginSiswa(@RequestBody LoginSiswaRequest request){
+
+        Siswa siswa = siswaService.loginSiswa(request);
+
+        SiswaResponse siswaResponse = SiswaResponse.builder()
+                .id(siswa.getId())
+                .nama(siswa.getNama())
+                .nis(siswa.getNis())
+                .email(siswa.getEmail())
+                .noHp(siswa.getNoHp())
+                .noHpOrtu(siswa.getNoHpOrtu())
+                .alamat(siswa.getAlamat())
+                .status(siswa.getStatus())
+                .tagihan(siswa.getTagihan())
+                .golongan(siswa.getGolongan().getId())
+                .isActive(siswa.getIsActive())
+                .createdAt(siswa.getCreatedAt())
+                .updatedAt(siswa.getUpdatedAt())
+                .build();
+
+        BaseResponse response = CommonResponse.<SiswaResponse>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("successfully add data")
+                .data(siswaResponse)
+                .build();
+        return ResponseEntity.ok(response);
     }
 }
