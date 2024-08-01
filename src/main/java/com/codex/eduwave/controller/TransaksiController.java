@@ -3,6 +3,7 @@ package com.codex.eduwave.controller;
 import com.codex.eduwave.constant.ApiUrl;
 import com.codex.eduwave.entity.Transaksi;
 import com.codex.eduwave.model.request.TransaksiRequest;
+import com.codex.eduwave.model.request.UpdateTransaksiPembayaranStatusRequest;
 import com.codex.eduwave.model.response.BaseResponse;
 import com.codex.eduwave.model.response.CommonResponse;
 import com.codex.eduwave.model.response.TransaksiResponse;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class TransaksiController {
     private final TransaksiService transaksiService;
 
     @PostMapping
-    public ResponseEntity<BaseResponse> createNewTransaksi (@RequestBody TransaksiRequest request) {
+    public ResponseEntity<BaseResponse> createNewTransaksi(@RequestBody TransaksiRequest request) {
         TransaksiResponse transaksi = transaksiService.create(request);
 
         BaseResponse baseResponse = CommonResponse.builder()
@@ -34,7 +36,7 @@ public class TransaksiController {
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
 
-    @GetMapping("{siswaId}")
+    @GetMapping("/{siswaId}")
     public ResponseEntity<BaseResponse> getTransaksiBySiswaId(@PathVariable String siswaId) {
 
         List<TransaksiSiswaResponse> transaksiList = transaksiService.getAllByIdSiswa(siswaId);
@@ -43,6 +45,25 @@ public class TransaksiController {
                 .statusCode(HttpStatus.OK.value())
                 .message("Successfully get all transaction siswa")
                 .data(transaksiList)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping(path = "/status")
+    public ResponseEntity<BaseResponse> updateStatus(
+            @RequestBody Map<String, Object> request
+    ) {
+        UpdateTransaksiPembayaranStatusRequest updateStatus = UpdateTransaksiPembayaranStatusRequest.builder()
+                .orderId(request.get("order_id").toString())
+                .transactionStatus(request.get("transaction_status").toString())
+                .build();
+
+        transaksiService.updateStatus(updateStatus);
+
+        BaseResponse response = CommonResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Successfully update status")
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
