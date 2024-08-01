@@ -57,7 +57,6 @@ public class GolonganServiceImpl implements GolonganService {
                        .updatedAt(new Date())
                        .build()
        );
-
     }
 
     @Override
@@ -77,7 +76,6 @@ public class GolonganServiceImpl implements GolonganService {
 
         Specification<Golongan> spesification = GolonganSpecification.getSpesification(request);
         return golonganRepository.findAll(spesification);
-
     }
 
     @Override
