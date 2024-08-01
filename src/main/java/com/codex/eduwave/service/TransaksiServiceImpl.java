@@ -8,6 +8,7 @@ import com.codex.eduwave.model.request.UpdateTransaksiPembayaranStatusRequest;
 import com.codex.eduwave.model.response.PembayaranResponse;
 import com.codex.eduwave.model.response.SiswaResponse;
 import com.codex.eduwave.model.response.TransaksiResponse;
+import com.codex.eduwave.model.response.TransaksiSiswaResponse;
 import com.codex.eduwave.repository.TransaksiRepository;
 import com.codex.eduwave.service.intrface.PembayaranService;
 import com.codex.eduwave.service.intrface.SiswaService;
@@ -85,9 +86,25 @@ public class TransaksiServiceImpl implements TransaksiService {
     }
 
     @Override
-    public List<TransaksiResponse> getAll() {
+    public List<TransaksiSiswaResponse> getAllByIdSiswa(String siswaId) {
+        List<Transaksi> transaksiList = transaksiRepository.findBySiswaId(siswaId);
 
-        return List.of();
+        return  transaksiList.stream().map(
+                transaksi -> {
+                    return TransaksiSiswaResponse.builder()
+                            .id(transaksi.getId())
+                            .siswaId(transaksi.getSiswa().getId())
+                            .namaSiswa(transaksi.getSiswa().getNama())
+                            .nis(transaksi.getSiswa().getNis())
+                            .golongan(transaksi.getSiswa().getGolongan().getGolongan())
+                            .jumlahPembayaran(transaksi.getJumlahBayar())
+                            .statusPembayaran(transaksi.getPembayaran().getTransactionStatus())
+                            .tanggalTransaksi(transaksi.getTransDate())
+                            .build();
+                }
+        ).toList();
+
+
     }
 
     @Override

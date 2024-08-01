@@ -4,10 +4,7 @@ import com.codex.eduwave.constant.StatusSPP;
 import com.codex.eduwave.entity.Golongan;
 import com.codex.eduwave.entity.Sekolah;
 import com.codex.eduwave.entity.Siswa;
-import com.codex.eduwave.model.request.SearchSiswaRequest;
-import com.codex.eduwave.model.request.SiswaRequest;
-import com.codex.eduwave.model.request.TransaksiRequest;
-import com.codex.eduwave.model.request.UpdateSiswaRequest;
+import com.codex.eduwave.model.request.*;
 import com.codex.eduwave.model.response.JwtClaims;
 import com.codex.eduwave.repository.SiswaRepository;
 import com.codex.eduwave.service.intrface.*;
@@ -159,6 +156,17 @@ public class SiswaServiceImpl implements SiswaService {
         ).toList();
 
         return siswaRepository.saveAllAndFlush(siswaList);
+    }
+
+    @Override
+    public Siswa loginSiswa(LoginSiswaRequest request) {
+        Siswa siswa = getByNis(request.getNis());
+
+        if (!siswa.getEmail().equals(request.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Email and NIS not relevant");
+        }
+
+        return siswa;
     }
 
     public Siswa getSiswaOrElseThrowException(String id) {
