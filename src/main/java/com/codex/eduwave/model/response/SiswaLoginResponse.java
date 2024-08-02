@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SiswaResponse {
+public class SiswaLoginResponse {
     private String id;
 
     private String nama;
@@ -40,11 +40,12 @@ public class SiswaResponse {
     @JsonProperty("is_active")
     private Boolean isActive;
 
+    private String sekolah;
+
+    private String urlLogo;
+
     @JsonProperty("golongan")
     private String golongan;
-
-    @JsonProperty("golongan_id")
-    private String golonganId;
 
     @JsonProperty("spp")
     private Integer spp;

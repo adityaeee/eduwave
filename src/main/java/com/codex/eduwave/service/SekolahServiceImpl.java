@@ -37,6 +37,7 @@ public class SekolahServiceImpl implements SekolahService {
     private final AccountService accountService;
     private final ValidationUtil validationUtil;
 
+
     final String AUTO_HEADER = "Authorization";
     private final HttpServletRequest httpServletRequest;
     private final JwtService jwtService;
@@ -111,7 +112,22 @@ public class SekolahServiceImpl implements SekolahService {
 
     @Override
     public Sekolah getByNpsn(String npsn) {
-       return sekolahRepository.findByNpsn(npsn).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Npsn not found"));
+
+        String bearerToken = httpServletRequest.getHeader(AUTO_HEADER);
+        JwtClaims jwtClaims = jwtService.getClaimsByToken(bearerToken);
+
+        Sekolah sekolah = getSekolahByAccountId(jwtClaims.getAccountId());
+
+        if (sekolah.getNpsn().equals(npsn)) {
+            return sekolahRepository.findByNpsn(npsn).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "NPSN not found"));
+        }else {
+             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NPSN is different from the NPSN of the school that is currently logged in");
+        }
+    }
+
+    @Override
+    public Sekolah getById(String id) {
+        return getByidIfExist(id);
     }
 
     @Override
