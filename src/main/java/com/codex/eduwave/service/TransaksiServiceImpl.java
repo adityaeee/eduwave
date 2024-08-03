@@ -107,6 +107,12 @@ public class TransaksiServiceImpl implements TransaksiService {
         ).toList();
     }
 
+    @Override
+    public Transaksi getById(String id) {
+        return transaksiRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Transaction not found"));
+    }
+
+
     @Transactional(rollbackOn = Exception.class)
     @Override
     public void updateStatus(UpdateTransaksiPembayaranStatusRequest request) {

@@ -221,7 +221,7 @@ public class SiswaController {
 
     }
 
-    @PostMapping("/login")
+    @PostMapping(path = "/login")
     public ResponseEntity<BaseResponse> loginSiswa(@RequestBody LoginSiswaRequest request){
 
         Siswa siswa = siswaService.loginSiswa(request);

@@ -6,6 +6,8 @@ import java.util.Date;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TransaksiResponse {
     private String id;
     private Date transDate;
