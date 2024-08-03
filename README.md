@@ -143,6 +143,20 @@ Content-Type : multipart/form-data;
 }
 ```
 
-### Get By Id
+### Get By NPSN
+- **Endpoint**
+```http
+  GET /api/v1/sekolah/{npsn}
+```
+- **Path Variable**
+
+| Parameter | Type     | Description                   |
+|:----------| :------- |:------------------------------|
+| `npsn`    | `Integer` | **Required**. NPSN of sekolah |
+
+
+- **Response**
+- 
+
 ### Update Sekolah
 ### Delete Sekolah
