@@ -28,7 +28,7 @@ public class SekolahResponse {
     private String npsn;
 
     private String logo;
-
+//
 //    @JsonProperty("golongan_sekolah")
 //    private List<Golongan> golonganSekolah;
 
