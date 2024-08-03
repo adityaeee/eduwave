@@ -53,6 +53,12 @@ Develope a school fee payment system that facilitates quick, secure, and efficie
   POST /api/v1/sekolah
 ```
 
+- **Header**
+
+| Header           | Type    | Description                         |
+|:-----------------|:--------|:------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_ADMIN |
+
 - **Request** \
 Content-Type : multipart/form-data;
 
@@ -93,6 +99,12 @@ Content-Type : multipart/form-data;
 ```http
   GET /api/v1/sekolah
 ```
+
+- **Header**
+
+| Header           | Type    | Description                         |
+|:-----------------|:--------|:------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_ADMIN |
 
 - **Query Params**
 
@@ -148,15 +160,312 @@ Content-Type : multipart/form-data;
 ```http
   GET /api/v1/sekolah/{npsn}
 ```
+
 - **Path Variable**
 
 | Parameter | Type     | Description                   |
 |:----------| :------- |:------------------------------|
 | `npsn`    | `Integer` | **Required**. NPSN of sekolah |
 
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_SEKOLAH |
+
 
 - **Response**
-- 
+```json
+{
+    "statusCode": 202,
+    "message": "You have successfully logged in",
+    "data": {
+        "username": "0101010101",
+        "token": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlZHV3YXZlIiwiaWF0IjoxNzIyNzAzMzMwLCJleHAiOjE3MjI5NjI1MzAsInN1YiI6IjRiMTU4NDc0LTIyYWUtNDNkOC1iZDgyLTI0MmI3YmQ4YWFlYyIsInJvbGVzIjpbIlJPTEVfU0VLT0xBSCJdfQ.THMtJ_v_7biX_Kwzell62s7oPx381hxzRIRqFDIX360vSQTn-6o6tG4O5AChu9Ek1b16aJyIWpzwRYq0lXsGjA",
+        "roles": [
+            "ROLE_SEKOLAH"
+        ]
+    }
+}
+```
 
 ### Update Sekolah
-### Delete Sekolah
+- **Endpoint**
+```http
+  PUT /api/v1/sekolah
+```
+
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_ADMIN |
+
+
+- **Request** \
+  Content-Type : multipart/form-data;
+
+| Parameter         | Type   | Description                          |
+|:------------------|:-------|:-------------------------------------|
+| `sekolah_request` | `text` | **Required**. Json to create sekolah |
+| `logo`            | `file` | image for sekolah      |
+
+```json
+{
+  "sekolah_request":{
+      "id": "ba2098ba-dcfe-4dce-981d-699388f854a7",
+      "sekolah": "SMP 23 Jakarta",
+      "email": "sekolahabc@example.com",
+      "noHp": "08123456789",
+      "npsn": "1237821555",
+      "password": "your_password"
+    }
+}
+```
+
+- **Response**
+
+```json
+{
+    "statusCode": 200,
+    "message": "successfully update data",
+    "data": {
+        "id": "a6c00ca1-ea92-43b6-95c0-614677836193",
+        "sekolah": "SMP 23 Jakarta",
+        "email": "sekolahabc@example.com",
+        "npsn": "0101010101",
+        "logo": "https://ik.imagekit.io/soeauotwj/031a49d9-b44a-472a-b6ff-ffa39970d7c9_chicken_k7fWhH904.png",
+        "no_hp": "08123456789",
+        "created_by": "admin"
+    }
+}
+```
+
+### Delete By id Sekolah
+
+- **Endpoint**
+```http
+  DELETE /api/v1/sekolah/{id}
+```
+
+- **Path Variable**
+
+| Parameter | Type     | Description                 |
+|:----------|:---------|:----------------------------|
+| `id`      | `String` | **Required**. id of sekolah |
+
+
+- **Header**
+
+| Header           | Type    | Description                         |
+|:-----------------|:--------|:------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_ADMIN |
+
+
+- **Response**
+
+```json
+{
+    "statusCode": 200,
+    "message": "successfully delete data sekolah",
+    "data": null
+}
+```
+
+## Golongan
+
+
+### Create Golongan
+- **Endpoint**
+```http
+  POST /api/v1/golongan
+```
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_SEKOLAH |
+
+- **Request**
+```json
+{
+    "golongan": "golongan sedang",
+    "spp": 20000000
+}
+```
+
+- **Response**
+
+```json
+{
+    "statusCode": 200,
+    "message": "successfully add data",
+    "data": {
+        "id": "09d29fa6-f8ad-465d-a929-dc4dd0592f48",
+        "golongan": "golongan sedang",
+        "spp": 20000000,
+        "sekolahId": "a6c00ca1-ea92-43b6-95c0-614677836193",
+        "createdAt": "2024-08-03T16:58:52.118+00:00",
+        "updateAt": "2024-08-03T16:58:52.118+00:00"
+    }
+}
+```
+
+### Get All Golongan
+
+- **Endpoint**
+```http
+  GET /api/v1/golongan
+```
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_SEKOLAH |
+
+- **Response**
+```json
+{
+    "statusCode": 200,
+    "message": "successfully get data",
+    "data": [
+        {
+            "id": "09d29fa6-f8ad-465d-a929-dc4dd0592f48",
+            "golongan": "golongan sedang",
+            "spp": 20000000,
+            "sekolahId": "a6c00ca1-ea92-43b6-95c0-614677836193",
+            "createdAt": "2024-08-03",
+            "updateAt": "2024-08-03"
+        },
+        {
+            "id": "304d427e-37a7-42ad-a0e8-99b0d7749e81",
+            "golongan": "golongan rendah",
+            "spp": 10000000,
+            "sekolahId": "a6c00ca1-ea92-43b6-95c0-614677836193",
+            "createdAt": "2024-08-04",
+            "updateAt": "2024-08-04"
+        }
+    ],
+    "paging": null
+}
+```
+
+### Get By id Golongan
+- **Endpoint**
+```http
+  GET /api/v1/golongan/{id}
+```
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_SEKOLAH |
+
+- **Path Variable**
+
+| Parameter | Type     | Description                  |
+|:----------|:---------|:-----------------------------|
+| `id`      | `String` | **Required**. id of Golongan |
+
+- **Response**
+```json
+{
+    "statusCode": 200,
+    "message": "successfully add data",
+    "data": {
+        "id": "09d29fa6-f8ad-465d-a929-dc4dd0592f48",
+        "golongan": "golongan sedang",
+        "spp": 20000000,
+        "sekolahId": "a6c00ca1-ea92-43b6-95c0-614677836193",
+        "createdAt": "2024-08-03",
+        "updateAt": "2024-08-03"
+    }
+}
+```
+
+### Update Golongan
+- **Endpoint**
+```http
+  PUT /api/v1/golongan
+```
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_SEKOLAH |
+
+- **Request**
+```json
+{
+    "id": "09d29fa6-f8ad-465d-a929-dc4dd0592f48",
+    "golongan": "golongan sedang",
+    "spp": 20000000
+}
+```
+- **Response**
+
+```json
+{
+    "statusCode": 200,
+    "message": "successfully update data",
+    "data": {
+        "id": "09d29fa6-f8ad-465d-a929-dc4dd0592f48",
+        "golongan": "golongan sedang",
+        "spp": 20000000,
+        "sekolahId": "a6c00ca1-ea92-43b6-95c0-614677836193",
+        "createdAt": "2024-08-03",
+        "updateAt": "2024-08-04"
+    }
+}
+```
+
+### Delete By id Golongan
+
+- **Endpoint**
+```http
+  DELETE /api/v1/golongan/{id}
+```
+
+- **Path Variable**
+
+| Parameter | Type     | Description                  |
+|:----------|:---------|:-----------------------------|
+| `id`      | `String` | **Required**. id of golongan |
+
+
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_SEKOLAH |
+
+
+- **Response**
+
+```json
+{
+    "statusCode": 200,
+    "message": "successfully delete data golongan",
+    "data": null
+}
+```
+
+
+
+
+## Siswa
+
+### Create Siswa
+### Get All Siswa
+### Get By id Siswa
+### Update Siswa
+### Delete Siswa
+### Reset Tagihan
+### Login Siswa
+
+## Transaksi
+### Create Transaksi
+
+### Get All Transaksi By siswaId
+
+### Get transaksi By id
