@@ -32,7 +32,7 @@ public class SiswaSpecification {
             }
 
             if (request.getStatus() != null) {
-                Predicate statusPredicate = criteriaBuilder.equal(criteriaBuilder.lower(root.get("status")), request.getStatus());
+                Predicate statusPredicate = criteriaBuilder.equal(criteriaBuilder.lower(root.get("status")), request.getStatus().toString().toLowerCase());
                 predicates.add(statusPredicate);
             }
 

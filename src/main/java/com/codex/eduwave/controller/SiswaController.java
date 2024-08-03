@@ -7,6 +7,7 @@ import com.codex.eduwave.model.request.*;
 import com.codex.eduwave.model.response.*;
 import com.codex.eduwave.service.intrface.SiswaService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = ApiUrl.SISWA_API)
@@ -72,7 +74,9 @@ public class SiswaController {
                             .alamat(siswa.getAlamat())
                             .status(siswa.getStatus())
                             .tagihan(siswa.getTagihan())
-                            .golongan(siswa.getGolongan().getId())
+                            .golonganId(siswa.getGolongan().getId())
+                            .golongan(siswa.getGolongan().getGolongan())
+                            .spp(siswa.getGolongan().getSpp())
                             .isActive(siswa.getIsActive())
                             .createdAt(siswa.getCreatedAt())
                             .updatedAt(siswa.getUpdatedAt())
@@ -105,7 +109,9 @@ public class SiswaController {
                 .alamat(siswa.getAlamat())
                 .status(siswa.getStatus())
                 .tagihan(siswa.getTagihan())
-                .golongan(siswa.getGolongan().getId())
+                .golonganId(siswa.getGolongan().getId())
+                .golongan(siswa.getGolongan().getGolongan())
+                .spp(siswa.getGolongan().getSpp())
                 .isActive(siswa.getIsActive())
                 .createdAt(siswa.getCreatedAt())
                 .updatedAt(siswa.getUpdatedAt())
@@ -135,7 +141,9 @@ public class SiswaController {
                 .alamat(siswa.getAlamat())
                 .status(siswa.getStatus())
                 .tagihan(siswa.getTagihan())
-                .golongan(siswa.getGolongan().getId())
+                .golonganId(siswa.getGolongan().getId())
+                .golongan(siswa.getGolongan().getGolongan())
+                .spp(siswa.getGolongan().getSpp())
                 .isActive(siswa.getIsActive())
                 .createdAt(siswa.getCreatedAt())
                 .updatedAt(siswa.getUpdatedAt())
@@ -163,7 +171,9 @@ public class SiswaController {
                 .alamat(siswa.getAlamat())
                 .status(siswa.getStatus())
                 .tagihan(siswa.getTagihan())
-                .golongan(siswa.getGolongan().getId())
+                .golonganId(siswa.getGolongan().getId())
+                .golongan(siswa.getGolongan().getGolongan())
+                .spp(siswa.getGolongan().getSpp())
                 .isActive(siswa.getIsActive())
                 .createdAt(siswa.getCreatedAt())
                 .updatedAt(siswa.getUpdatedAt())
@@ -182,8 +192,8 @@ public class SiswaController {
         siswaService.inActive(id);
         BaseResponse response = CommonResponse.<String>builder()
                 .statusCode(HttpStatus.OK.value())
-                .message("Student data that was successfully changed to be inactive")
-                .data(String.format("Students with ID %S are inactive", id))
+                .message("Student Active that was successfully changed")
+                .data(String.format("Students with ID %S was changed", id))
                 .build();
         return ResponseEntity.ok(response);
     }
@@ -194,10 +204,8 @@ public class SiswaController {
     public ResponseEntity<BaseResponse> resetSiswaStatus(
             @RequestBody UpdateStatusSiswaBulk request
     ){
-
         List<Siswa> list = request.getSiswaId().stream().map(
                 siswa -> {
-
                     return siswaService.getById(siswa);
                 }
         ).toList();
@@ -218,7 +226,7 @@ public class SiswaController {
 
         Siswa siswa = siswaService.loginSiswa(request);
 
-        SiswaResponse siswaResponse = SiswaResponse.builder()
+        SiswaLoginResponse siswaResponse = SiswaLoginResponse.builder()
                 .id(siswa.getId())
                 .nama(siswa.getNama())
                 .nis(siswa.getNis())
@@ -228,13 +236,16 @@ public class SiswaController {
                 .alamat(siswa.getAlamat())
                 .status(siswa.getStatus())
                 .tagihan(siswa.getTagihan())
-                .golongan(siswa.getGolongan().getId())
+                .sekolah(siswa.getGolongan().getSekolah().getSekolah())
+                .urlLogo(siswa.getGolongan().getSekolah().getLogo().getUrl())
+                .golongan(siswa.getGolongan().getGolongan())
+                .spp(siswa.getGolongan().getSpp())
                 .isActive(siswa.getIsActive())
                 .createdAt(siswa.getCreatedAt())
                 .updatedAt(siswa.getUpdatedAt())
                 .build();
 
-        BaseResponse response = CommonResponse.<SiswaResponse>builder()
+        BaseResponse response = CommonResponse.<SiswaLoginResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("successfully add data")
                 .data(siswaResponse)

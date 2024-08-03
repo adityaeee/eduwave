@@ -4,6 +4,7 @@ import com.codex.eduwave.entity.Pembayaran;
 import com.codex.eduwave.entity.Siswa;
 import com.codex.eduwave.entity.Transaksi;
 import com.codex.eduwave.model.request.TransaksiRequest;
+import com.codex.eduwave.model.request.UpdateStatusTagihanSiswaRequest;
 import com.codex.eduwave.model.request.UpdateTransaksiPembayaranStatusRequest;
 import com.codex.eduwave.model.response.PembayaranResponse;
 import com.codex.eduwave.model.response.SiswaResponse;
@@ -34,13 +35,14 @@ public class TransaksiServiceImpl implements TransaksiService {
     @Override
     public TransaksiResponse create(TransaksiRequest request) {
 
-        Siswa checkTagihan = siswaService.getByNis(request.getNis());
+        Siswa siswa = siswaService.getByNis(request.getNis());
 
-        if (checkTagihan.getTagihan() < request.getJumlahBayar()) {
-            request.setJumlahBayar(checkTagihan.getTagihan());
+        if(!siswa.getIsActive()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Siswa non active");
         }
-
-        Siswa siswa = siswaService.updateStatusTagihan(request);
+        if (siswa.getTagihan() < request.getJumlahBayar()) {
+            request.setJumlahBayar(siswa.getTagihan());
+        }
 
         Transaksi transaksi = transaksiRepository.saveAndFlush(
                 Transaksi.builder()
@@ -103,12 +105,25 @@ public class TransaksiServiceImpl implements TransaksiService {
                             .build();
                 }
         ).toList();
-
-
     }
 
+    @Transactional(rollbackOn = Exception.class)
     @Override
     public void updateStatus(UpdateTransaksiPembayaranStatusRequest request) {
+        Transaksi transaksi = transaksiRepository.findById(request.getOrderId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Transaction Not Found"));
 
+        Pembayaran pembayaran = transaksi.getPembayaran();
+        pembayaran.setTransactionStatus(request.getTransactionStatus());
+
+//        settlement
+        if (request.getTransactionStatus().equals("settlement")) {
+            UpdateStatusTagihanSiswaRequest updateStatusTagihanSiswa = UpdateStatusTagihanSiswaRequest.builder()
+                    .siswaId(transaksi.getSiswa().getId())
+                    .jumlahBayar(transaksi.getJumlahBayar())
+                    .build();
+
+            siswaService.updateStatusTagihan(updateStatusTagihanSiswa);
+        }
     }
 }
