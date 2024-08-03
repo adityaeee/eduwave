@@ -1,6 +1,7 @@
 package com.codex.eduwave.service;
 
 import com.codex.eduwave.entity.Pembayaran;
+import com.codex.eduwave.entity.Sekolah;
 import com.codex.eduwave.entity.Siswa;
 import com.codex.eduwave.entity.Transaksi;
 import com.codex.eduwave.model.request.TransaksiRequest;
@@ -12,6 +13,7 @@ import com.codex.eduwave.model.response.TransaksiResponse;
 import com.codex.eduwave.model.response.TransaksiSiswaResponse;
 import com.codex.eduwave.repository.TransaksiRepository;
 import com.codex.eduwave.service.intrface.PembayaranService;
+import com.codex.eduwave.service.intrface.SekolahService;
 import com.codex.eduwave.service.intrface.SiswaService;
 import com.codex.eduwave.service.intrface.TransaksiService;
 import jakarta.transaction.Transactional;
@@ -30,15 +32,26 @@ public class TransaksiServiceImpl implements TransaksiService {
     private final TransaksiRepository transaksiRepository;
     private final SiswaService siswaService;
     private final PembayaranService pembayaranService;
+    private final SekolahService sekolahService;
 
     @Transactional(rollbackOn = Exception.class)
     @Override
     public TransaksiResponse create(TransaksiRequest request) {
 
+        Sekolah sekolah = sekolahService.getById(request.getSekolahId());
+
+        List<Siswa> siswaBySekolahId = siswaService.getSiswaBySekolahId(sekolah.getId());
+
+        boolean checkNis = siswaBySekolahId.stream().anyMatch(siswa -> siswa.getNis().equals(request.getNis()));
+
+        if (!checkNis) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Student are not registered at this School");
+        }
+
         Siswa siswa = siswaService.getByNis(request.getNis());
 
         if(!siswa.getIsActive()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Siswa non active");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Student is inactive");
         }
         if (siswa.getTagihan() < request.getJumlahBayar()) {
             request.setJumlahBayar(siswa.getTagihan());
@@ -106,6 +119,12 @@ public class TransaksiServiceImpl implements TransaksiService {
                 }
         ).toList();
     }
+
+    @Override
+    public Transaksi getById(String id) {
+        return transaksiRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Transaction not found"));
+    }
+
 
     @Transactional(rollbackOn = Exception.class)
     @Override

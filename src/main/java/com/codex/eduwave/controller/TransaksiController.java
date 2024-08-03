@@ -4,10 +4,7 @@ import com.codex.eduwave.constant.ApiUrl;
 import com.codex.eduwave.entity.Transaksi;
 import com.codex.eduwave.model.request.TransaksiRequest;
 import com.codex.eduwave.model.request.UpdateTransaksiPembayaranStatusRequest;
-import com.codex.eduwave.model.response.BaseResponse;
-import com.codex.eduwave.model.response.CommonResponse;
-import com.codex.eduwave.model.response.TransaksiResponse;
-import com.codex.eduwave.model.response.TransaksiSiswaResponse;
+import com.codex.eduwave.model.response.*;
 import com.codex.eduwave.service.intrface.TransaksiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,7 +33,7 @@ public class TransaksiController {
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
 
-    @GetMapping("/{siswaId}")
+    @GetMapping("/siswa/{siswaId}")
     public ResponseEntity<BaseResponse> getTransaksiBySiswaId(@PathVariable String siswaId) {
 
         List<TransaksiSiswaResponse> transaksiList = transaksiService.getAllByIdSiswa(siswaId);
@@ -49,6 +46,31 @@ public class TransaksiController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @GetMapping(path = ApiUrl.PATH_VAR_ID)
+    public ResponseEntity<BaseResponse> getTransactionById (@PathVariable String id) {
+        Transaksi transaksi = transaksiService.getById(id);
+
+        TransaksiByIdResponse transaksiByIdResponse = TransaksiByIdResponse.builder()
+                .id(transaksi.getId())
+                .nama(transaksi.getSiswa().getNama())
+                .nis(transaksi.getSiswa().getNis())
+                .email(transaksi.getSiswa().getEmail())
+                .jumlahBayar(transaksi.getJumlahBayar())
+                .golongan(transaksi.getSiswa().getGolongan().getGolongan())
+                .transactionStatus(transaksi.getPembayaran().getTransactionStatus())
+                .transDate(transaksi.getTransDate())
+                .build();
+
+        BaseResponse response = CommonResponse.<TransaksiByIdResponse>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Successfully get data transaction")
+                .data(transaksiByIdResponse)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 
     @PostMapping(path = "/status")
     public ResponseEntity<BaseResponse> updateStatus(

@@ -13,9 +13,10 @@ public interface SiswaService {
     Siswa getByNis(String nis);
     Page<Siswa> getAll(SearchSiswaRequest request);
     Siswa update(UpdateSiswaRequest request);
-    Siswa updateStatusTagihan(UpdateStatusTagihanSiswaRequest request);
+    void updateStatusTagihan(UpdateStatusTagihanSiswaRequest request);
     void inActive(String id);
     List<Siswa> updateStatusBulk(List<Siswa> requests);
+    List<Siswa> getSiswaBySekolahId(String sekolahId);
     Siswa loginSiswa (LoginSiswaRequest request);
 
 }

@@ -13,6 +13,4 @@ public interface SekolahRepository  extends JpaRepository<Sekolah,String>, JpaSp
     List<Sekolah> findByIsDeletedFalse();
     Optional<Sekolah> findByAccountId(String accountId);
     Optional<Sekolah> findByNpsn(String npsn);
-
-
 }
