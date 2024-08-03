@@ -113,7 +113,7 @@ public class SiswaServiceImpl implements SiswaService {
     }
 
     @Override
-    public Siswa updateStatusTagihan(UpdateStatusTagihanSiswaRequest request) {
+    public void updateStatusTagihan(UpdateStatusTagihanSiswaRequest request) {
         Siswa siswa = getById(request.getSiswaId());
 
         int sisaTagihan = siswa.getTagihan() - request.getJumlahBayar();
@@ -125,7 +125,7 @@ public class SiswaServiceImpl implements SiswaService {
         } else {
             siswa.setTagihan(sisaTagihan);
         }
-        return siswaRepository.saveAndFlush(siswa);
+        siswaRepository.saveAndFlush(siswa);
     }
 
     @Override
@@ -152,6 +152,11 @@ public class SiswaServiceImpl implements SiswaService {
         ).toList();
 
         return siswaRepository.saveAllAndFlush(siswaList);
+    }
+
+    @Override
+    public List<Siswa> getSiswaBySekolahId(String sekolahId) {
+        return siswaRepository.findByGolonganSekolahId(sekolahId);
     }
 
     @Override

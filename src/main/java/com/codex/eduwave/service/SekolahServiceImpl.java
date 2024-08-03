@@ -170,15 +170,15 @@ public class SekolahServiceImpl implements SekolahService {
 
     @Override
     public Sekolah getSekolahByAccountId(String accountId) {
-      return sekolahRepository.findByAccountId(accountId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data sekolah not found"));
+      return sekolahRepository.findByAccountId(accountId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found"));
     }
 
 
     private Sekolah getByidIfExist(String id) {
-        Sekolah sekolah = sekolahRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
+        Sekolah sekolah = sekolahRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found"));
 
         if(sekolah.getIsDeleted()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found");
         }
 
         return sekolah;
