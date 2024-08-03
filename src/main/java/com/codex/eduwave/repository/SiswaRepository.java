@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface SiswaRepository extends JpaRepository<Siswa, String>, JpaSpecificationExecutor<Siswa> {
     Optional<Siswa> findByNis(String nis);
+    List<Siswa> findByGolonganSekolahId(String sekolahId);
 }
