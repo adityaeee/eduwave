@@ -29,6 +29,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/transaksi/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v1/siswa/login").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/siswa/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/siswa/bayar/{nis}").permitAll()
 //                        .requestMatchers(HttpMethod.GET,"/api/v1/sekolah/**").permitAll()
                         .anyRequest().authenticated()
                 )

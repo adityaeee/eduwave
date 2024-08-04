@@ -252,4 +252,36 @@ public class SiswaController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+
+    @GetMapping(path = "/bayar/{nis}")
+    public ResponseEntity<BaseResponse> getSiswaByNis(@PathVariable String nis){
+        Siswa siswa = siswaService.getByNis(nis);
+
+        SiswaLoginResponse siswaResponse = SiswaLoginResponse.builder()
+                .id(siswa.getId())
+                .nama(siswa.getNama())
+                .nis(siswa.getNis())
+                .email(siswa.getEmail())
+                .noHp(siswa.getNoHp())
+                .noHpOrtu(siswa.getNoHpOrtu())
+                .alamat(siswa.getAlamat())
+                .status(siswa.getStatus())
+                .tagihan(siswa.getTagihan())
+                .sekolah(siswa.getGolongan().getSekolah().getSekolah())
+                .urlLogo(siswa.getGolongan().getSekolah().getLogo().getUrl())
+                .golongan(siswa.getGolongan().getGolongan())
+                .spp(siswa.getGolongan().getSpp())
+                .isActive(siswa.getIsActive())
+                .createdAt(siswa.getCreatedAt())
+                .updatedAt(siswa.getUpdatedAt())
+                .build();
+
+        BaseResponse response = CommonResponse.<SiswaLoginResponse>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("successfully add data")
+                .data(siswaResponse)
+                .build();
+        return ResponseEntity.ok(response);
+    }
 }
