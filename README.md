@@ -456,16 +456,441 @@ Content-Type : multipart/form-data;
 ## Siswa
 
 ### Create Siswa
+
+- **Endpoint**
+```http
+  POST /api/v1/siswa
+```
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_SEKOLAH |
+
+- **Request**
+
+```json
+{
+  "nama": "anthoni",
+  "nis": "12341234",
+  "email": "anthoni@duck.com",
+  "noHp": "0812345678",
+  "noHpOrtu": "0887654321",
+  "alamat": "Jl. H. Ahmad Dahlan",
+  "golonganId": "ac30f23f-4add-49af-bfb4-cb6a1b84f314"
+}
+```
+
+
+- **Response**
+```json
+{
+    "statusCode": 200,
+    "message": "successfully add data",
+    "data": {
+        "id": "f08dc8ae-7a7d-4912-9ae1-3c63e0439956",
+        "nama": "anthoni",
+        "email": "anthoni@duck.com",
+        "alamat": "Jl. H. Ahmad Dahlan",
+        "status": "LUNAS",
+        "tagihan": 0,
+        "NIS": "12341234",
+        "no_hp": "0812345678",
+        "no_hp_ortu": "0887654321",
+        "is_active": true,
+        "golongan": "golongan Bangsawan",
+        "golongan_id": "09d29fa6-f8ad-465d-a929-dc4dd0592f48",
+        "spp": 20000000,
+        "created_at": "2024-08-04T06:57:34.554+00:00",
+        "updated_at": "2024-08-04T06:57:34.554+00:00"
+    }
+}
+```
+
 ### Get All Siswa
+- **Endpoint**
+```http
+  GET /api/v1/siswa
+```
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_SEKOLAH |
+
+
+- **Query Params**
+
+
+  | Parameter   | Type      | Description                                          |
+    |:------------|:----------|:-----------------------------------------------------|
+  | `golongan`  | `String`  | Search by golongan id                                |
+  | `nama`      | `String`  | Search by siswa name                                 |
+  | `nis`       | `Integer` | Search by siswa nis                                  |
+  | `tagihan`   | `Integer` | Search by siswa tagihan                              |
+  | `isActive`  | `Boolean` | Search by siswa isActive true or false               |
+  | `status`    | `String`  | Search by siswa status tagihan LUNAS or BELUM_LUNAS  |
+  | `page`      | `Integer` | number of page data sekolah                          |
+  | `size`      | `Integer` | Limit of row data sekolah                            |
+  | `sortBy`    | `String`  | Sorting data by their key, example "sekolah", "npsn" |
+  | `direction` | `String`  | Sorting by ASC or DESC                               |
+
+- **Response**
+
+```json
+{
+    "statusCode": 200,
+    "message": "Successfully get all data siswa",
+    "data": [
+        {
+            "id": "f08dc8ae-7a7d-4912-9ae1-3c63e0439956",
+            "nama": "anthoni",
+            "email": "anthoni@duck.com",
+            "alamat": "Jl. H. Ahmad Dahlan",
+            "status": "LUNAS",
+            "tagihan": 0,
+            "NIS": "12341234",
+            "no_hp": "0812345678",
+            "no_hp_ortu": "0887654321",
+            "is_active": true,
+            "golongan": "golongan Bangsawan",
+            "golongan_id": "09d29fa6-f8ad-465d-a929-dc4dd0592f48",
+            "spp": 20000000,
+            "created_at": "2024-08-04",
+            "updated_at": "2024-08-04"
+        }
+    ],
+    "paging": {
+        "totalPages": 1,
+        "totalElements": 1,
+        "page": 0,
+        "size": 10,
+        "hasNext": false,
+        "hasPrevious": false
+    }
+}
+```
+
 ### Get By id Siswa
+
+
+- **Endpoint**
+```http
+  GET /api/v1/siswa/{id}
+```
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_SEKOLAH |
+
+- **Path Variable**
+
+| Parameter | Type     | Description                 |
+|:----------|:---------|:----------------------------|
+| `id`      | `String` | **Required**. id of Sekolah |
+
+- **Response**
+
+```json
+{
+    "statusCode": 200,
+    "message": "successfully add data",
+    "data": {
+        "id": "f08dc8ae-7a7d-4912-9ae1-3c63e0439956",
+        "nama": "anthoni",
+        "email": "anthoni@duck.com",
+        "alamat": "Jl. H. Ahmad Dahlan",
+        "status": "LUNAS",
+        "tagihan": 0,
+        "NIS": "12341234",
+        "no_hp": "0812345678",
+        "no_hp_ortu": "0887654321",
+        "is_active": true,
+        "golongan": "golongan Bangsawan",
+        "golongan_id": "09d29fa6-f8ad-465d-a929-dc4dd0592f48",
+        "spp": 20000000,
+        "created_at": "2024-08-04",
+        "updated_at": "2024-08-04"
+    }
+}
+```
+
 ### Update Siswa
+
+
+- **Endpoint**
+```http
+  PUT /api/v1/siswa
+```
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_SEKOLAH |
+
+- **Request**
+```json
+{
+  "id" : "f08dc8ae-7a7d-4912-9ae1-3c63e0439956",
+  "nama": "Rifky",
+  "nis": "13131313",
+  "email": "rifky@duck.com",
+  "noHp": "0812345678",
+  "noHpOrtu": "0887654321",
+  "alamat": "Jl. H. Melati",
+  "golonganId": "09d29fa6-f8ad-465d-a929-dc4dd0592f48"
+}
+```
+- **Response**
+
+```json
+{
+  "statusCode": 200,
+  "message": "successfully update data siswa",
+  "data": {
+    "id": "f08dc8ae-7a7d-4912-9ae1-3c63e0439956",
+    "nama": "Rifky",
+    "email": "rifky@duck.com",
+    "alamat": "Jl. H. Melati",
+    "status": "LUNAS",
+    "tagihan": 0,
+    "NIS": "13131313",
+    "no_hp": "0812345678",
+    "no_hp_ortu": "0887654321",
+    "is_active": true,
+    "golongan": "golongan Bangsawan",
+    "golongan_id": "09d29fa6-f8ad-465d-a929-dc4dd0592f48",
+    "spp": 20000000,
+    "created_at": "2024-08-04",
+    "updated_at": "2024-08-04T07:10:48.008+00:00"
+  }
+}
+```
+
 ### Delete Siswa
+
+
+- **Endpoint**
+```http
+  DELETE /api/v1/siswa/{id}
+```
+
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_SEKOLAH |
+
+- **Path Variable**
+
+| Parameter | Type     | Description               |
+|:----------|:---------|:--------------------------|
+| `id`      | `String` | **Required**. id of Siswa |
+
+
+- **Response**
+```json
+{
+    "statusCode": 200,
+    "message": "Student Active that was successfully changed",
+    "data": "Students with ID F08DC8AE-7A7D-4912-9AE1-3C63E0439956 was changed"
+}
+```
+
 ### Reset Tagihan
+- **Endpoint**
+```http
+  POST /api/v1/siswa/reset
+```
+
+- **Header**
+
+| Header           | Type    | Description                           |
+|:-----------------|:--------|:--------------------------------------|
+| `Authorization`  | `Token` | **Required**. TOKEN with ROLE_SEKOLAH |
+
+
+- **Request**
+```json
+{
+    "siswaId" : [
+        "3e983609-9a7a-4588-8cdc-e3e1a64ad799",
+        "f08dc8ae-7a7d-4912-9ae1-3c63e0439956"
+    ]
+}
+```
+
+- **Response**
+```json
+{
+    "statusCode": 200,
+    "message": "successfully update status",
+    "data": null,
+    "paging": null
+}
+```
+
 ### Login Siswa
+- **Endpoint**
+```http
+  POST /api/v1/siswa/login
+```
+
+- **Request**
+```json
+{
+  "nis": "13131313",
+  "email": "rifky@duck.com"
+}
+```
+
+- **Response**
+
+```json
+{
+    "statusCode": 200,
+    "message": "successfully add data",
+    "data": {
+        "id": "f08dc8ae-7a7d-4912-9ae1-3c63e0439956",
+        "nama": "Rifky",
+        "email": "rifky@duck.com",
+        "alamat": "Jl. H. Melati",
+        "status": "BELUM_LUNAS",
+        "tagihan": 20000000,
+        "sekolah": "SMP 23 Jakarta",
+        "urlLogo": "https://ik.imagekit.io/soeauotwj/031a49d9-b44a-472a-b6ff-ffa39970d7c9_chicken_k7fWhH904.png",
+        "NIS": "13131313",
+        "no_hp": "0812345678",
+        "no_hp_ortu": "0887654321",
+        "is_active": false,
+        "golongan": "golongan Bangsawan",
+        "spp": 20000000,
+        "created_at": "2024-08-04",
+        "updated_at": "2024-08-04"
+    }
+}
+```
+
 
 ## Transaksi
 ### Create Transaksi
 
+- **Endpoint**
+```http
+  POST /api/v1/transaksi
+```
+
+- **Request**
+```json
+{
+    "sekolahId": "a6c00ca1-ea92-43b6-95c0-614677836193",
+    "nis": "13131313",
+    "jumlahBayar": 20000000
+}
+```
+
+- **Response**
+```json
+{
+    "statusCode": 200,
+    "message": "Successfully create transaction",
+    "data": {
+        "id": "431d7f8a-09ac-4774-87ef-14736e3732b9",
+        "transDate": "2024-08-04T07:32:18.089+00:00",
+        "siswa": {
+            "id": "f08dc8ae-7a7d-4912-9ae1-3c63e0439956",
+            "nama": "Rifky",
+            "email": "rifky@duck.com",
+            "alamat": "Jl. H. Melati",
+            "status": "BELUM_LUNAS",
+            "tagihan": 20000000,
+            "NIS": "13131313",
+            "no_hp": "0812345678",
+            "no_hp_ortu": "0887654321",
+            "is_active": true,
+            "golongan": "09d29fa6-f8ad-465d-a929-dc4dd0592f48",
+            "golongan_id": null,
+            "spp": null,
+            "created_at": "2024-08-04",
+            "updated_at": "2024-08-04"
+        },
+        "jumlahBayar": 20000000,
+        "pembayaran": {
+            "id": "41a5a54c-6cfa-491e-a85f-6f7c61ae6378",
+            "token": "664b54b9-9dee-4671-af9a-2c2159bcb65a",
+            "redirectUrl": "https://app.sandbox.midtrans.com/snap/v4/redirection/664b54b9-9dee-4671-af9a-2c2159bcb65a",
+            "transactionStatus": "pending"
+        }
+    }
+}
+```
+
 ### Get All Transaksi By siswaId
+- **Endpoint**
+```http
+  POST /api/v1/transaksi/siswa/{id}
+```
+
+
+- **Path Variable**
+
+| Parameter | Type     | Description               |
+|:----------|:---------|:--------------------------|
+| `id`      | `String` | **Required**. id of Siswa |
+
+- **Response**
+
+```json
+{
+    "statusCode": 200,
+    "message": "Successfully get all transaction siswa",
+    "data": [
+        {
+            "id": "431d7f8a-09ac-4774-87ef-14736e3732b9",
+            "nis": "13131313",
+            "golongan": "golongan Bangsawan",
+            "siswa_id": "f08dc8ae-7a7d-4912-9ae1-3c63e0439956",
+            "nama_siswa": "Rifky",
+            "jumlah_pembayaran": 20000000,
+            "status_pembayaran": "pending",
+            "tanggal_transaksi": "2024-08-04T07:32:18.089+00:00"
+        }
+    ]
+}
+```
+
+
 
 ### Get transaksi By id
+
+- **Endpoint**
+```http
+  POST /api/v1/transaksi/{id}
+```
+
+
+- **Path Variable**
+
+| Parameter | Type     | Description                     |
+|:----------|:---------|:--------------------------------|
+| `id`      | `String` | **Required**. id of Transaction |
+
+- **Response**
+
+```json
+{
+    "statusCode": 200,
+    "message": "Successfully get data transaction",
+    "data": {
+        "id": "431d7f8a-09ac-4774-87ef-14736e3732b9",
+        "transDate": "2024-08-04T07:32:18.089+00:00",
+        "nama": "Rifky",
+        "email": "rifky@duck.com",
+        "golongan": "golongan Bangsawan",
+        "jumlahBayar": 20000000,
+        "transactionStatus": "pending",
+        "NIS": "13131313"
+    }
+}
+```
