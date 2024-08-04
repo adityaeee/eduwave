@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -63,8 +64,11 @@ public class SekolahServiceImpl implements SekolahService {
         Specification<Sekolah> spesification = SekolahSpecification.getSpesification(request);
 
        return sekolahRepository.findAll(spesification,pageable);
+    }
 
-
+    @Override
+    public List<Sekolah> getAllSekolahForTransaction() {
+        return sekolahRepository.findAll();
     }
 
     @Override

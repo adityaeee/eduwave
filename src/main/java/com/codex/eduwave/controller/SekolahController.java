@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +28,7 @@ public class SekolahController {
     private final ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<BaseResponse> getAllDataSekolah(
 
@@ -75,7 +76,7 @@ public class SekolahController {
 
         BaseResponse response = CommonResponseWithPage.builder()
                 .statusCode(HttpStatus.OK.value())
-                .message("Successfully get data sekolah")
+                .message("Successfully get all data sekolah")
                 .data(listSekolahResponse)
                 .paging(pagingResponse)
                 .build();
@@ -83,7 +84,31 @@ public class SekolahController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping(path = "/list-sekolah")
+    public ResponseEntity<BaseResponse> getAllDataSekolahForTransaction() {
 
+        List<Sekolah> sekolahList = sekolahService.getAllSekolahForTransaction();
+
+        List<SekolahForCreateTransactionResponse> listSekolahResponse = sekolahList.stream().map(
+                sekolah -> {
+                   return SekolahForCreateTransactionResponse.builder()
+                           .id(sekolah.getId())
+                           .sekolah(sekolah.getSekolah())
+                           .logo(sekolah.getLogo().getUrl())
+                           .build();
+                }
+        ).toList();
+
+        BaseResponse response = CommonResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Successfully get all data sekolah")
+                .data(listSekolahResponse)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<BaseResponse> create(
             @RequestPart(name = "logo")MultipartFile logo,
@@ -120,6 +145,7 @@ public class SekolahController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','SEKOLAH')")
     @GetMapping(path = ApiUrl.PATH_VAR_NPSN)
     public ResponseEntity<BaseResponse> getById(@PathVariable String npsn){
         Sekolah sekolah = sekolahService.getByNpsn(npsn);
@@ -145,6 +171,7 @@ public class SekolahController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','SEKOLAH')")
     @PutMapping
     public ResponseEntity<BaseResponse> update(
             @RequestPart(name = "logo", required = false) MultipartFile logo,
@@ -181,6 +208,7 @@ public class SekolahController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = ApiUrl.PATH_VAR_ID)
     public ResponseEntity<BaseResponse> deleteSekolahById(@PathVariable String id){
         sekolahService.delete(id);
