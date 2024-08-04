@@ -108,6 +108,7 @@ Content-Type : multipart/form-data;
 
 - **Query Params**
 
+
   | Parameter   | Type      | Description                                          |
   |:------------|:----------|:-----------------------------------------------------|
   | `sekolah`   | `String`  | Search By name sekolah                               |
