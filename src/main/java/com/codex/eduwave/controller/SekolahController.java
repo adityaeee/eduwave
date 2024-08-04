@@ -147,7 +147,7 @@ public class SekolahController {
 
     @PreAuthorize("hasAnyRole('ADMIN','SEKOLAH')")
     @GetMapping(path = ApiUrl.PATH_VAR_NPSN)
-    public ResponseEntity<BaseResponse> getById(@PathVariable String npsn){
+    public ResponseEntity<BaseResponse> getByNpsnSekolah(@PathVariable String npsn){
         Sekolah sekolah = sekolahService.getByNpsn(npsn);
 
         SekolahByIdResponse sekolahResponse = SekolahByIdResponse.builder()
