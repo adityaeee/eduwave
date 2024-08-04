@@ -141,13 +141,12 @@ public class SekolahController {
             sekolahBuilder.message(e.toString());
             sekolahBuilder.statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(sekolahBuilder.build());
-
         }
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','SEKOLAH')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SEKOLAH')")
     @GetMapping(path = ApiUrl.PATH_VAR_NPSN)
-    public ResponseEntity<BaseResponse> getByNpsnSekolah(@PathVariable String npsn){
+    public ResponseEntity<BaseResponse> getByNpsn(@PathVariable String npsn){
         Sekolah sekolah = sekolahService.getByNpsn(npsn);
 
         SekolahByIdResponse sekolahResponse = SekolahByIdResponse.builder()

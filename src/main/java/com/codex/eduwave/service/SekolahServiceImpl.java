@@ -120,6 +120,12 @@ public class SekolahServiceImpl implements SekolahService {
         String bearerToken = httpServletRequest.getHeader(AUTO_HEADER);
         JwtClaims jwtClaims = jwtService.getClaimsByToken(bearerToken);
 
+        boolean roleAdmin = jwtClaims.getRoles().stream().anyMatch(roles -> roles.equals("ROLE_ADMIN"));
+
+        if (roleAdmin) {
+            return sekolahRepository.findByNpsn(npsn).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "NPSN not found"));
+        }
+
         Sekolah sekolah = getSekolahByAccountId(jwtClaims.getAccountId());
 
         if (sekolah.getNpsn().equals(npsn)) {
@@ -179,10 +185,10 @@ public class SekolahServiceImpl implements SekolahService {
 
 
     private Sekolah getByidIfExist(String id) {
-        Sekolah sekolah = sekolahRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found"));
+        Sekolah sekolah = sekolahRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schoool not found"));
 
         if(sekolah.getIsDeleted()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schooool not found");
         }
 
         return sekolah;
