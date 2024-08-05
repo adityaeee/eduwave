@@ -33,10 +33,13 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST,"/api/v1/siswa/login").permitAll()
 //                        .requestMatchers(HttpMethod.GET,"/api/v1/siswa/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/sekolah/list-sekolah").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/siswa/bayar/{nis}").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
                         authenticationFilter,
+
                         UsernamePasswordAuthenticationFilter.class
                 )
                 .addFilterBefore(
