@@ -1,6 +1,5 @@
-package com.codex.eduwave;
+package com.codex.eduwave.service;
 
-import com.codex.eduwave.constant.StatusSPP;
 import com.codex.eduwave.entity.Golongan;
 import com.codex.eduwave.entity.Sekolah;
 import com.codex.eduwave.entity.Siswa;
@@ -9,11 +8,9 @@ import com.codex.eduwave.model.request.SiswaRequest;
 import com.codex.eduwave.model.request.UpdateSiswaRequest;
 import com.codex.eduwave.model.response.JwtClaims;
 import com.codex.eduwave.repository.SiswaRepository;
-import com.codex.eduwave.service.SiswaServiceImpl;
 import com.codex.eduwave.service.intrface.GolonganService;
 import com.codex.eduwave.service.intrface.JwtService;
 import com.codex.eduwave.service.intrface.SekolahService;
-import com.codex.eduwave.service.intrface.SiswaService;
 import com.codex.eduwave.utils.ValidationUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,13 +21,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
