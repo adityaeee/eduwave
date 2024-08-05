@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class SiswaController {
 
     private final SiswaService siswaService;
 
+    @PreAuthorize("hasRole('SEKOLAH')")
     @GetMapping
     public ResponseEntity<BaseResponse> getAllDataSiswaWithSekolahId(
             @RequestParam(name = "nama", required = false) String nama,
@@ -94,6 +96,7 @@ public class SiswaController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PreAuthorize("hasRole('SEKOLAH')")
     @PostMapping
     public ResponseEntity<BaseResponse> createSiswa(@RequestBody SiswaRequest request){
 
@@ -125,6 +128,7 @@ public class SiswaController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('SEKOLAH')")
     @GetMapping(path = ApiUrl.PATH_VAR_ID)
     public ResponseEntity<BaseResponse> getById(
             @PathVariable String id
@@ -157,6 +161,7 @@ public class SiswaController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('SEKOLAH')")
     @PutMapping
     public ResponseEntity<BaseResponse> updateSiswa (@RequestBody UpdateSiswaRequest request) {
         Siswa siswa = siswaService.update(request);
@@ -187,6 +192,7 @@ public class SiswaController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('SEKOLAH')")
     @DeleteMapping(path = ApiUrl.PATH_VAR_ID)
     public ResponseEntity<BaseResponse> inActiveSiswa (@PathVariable String id){
         siswaService.inActive(id);
@@ -198,8 +204,7 @@ public class SiswaController {
         return ResponseEntity.ok(response);
     }
 
-
-
+    @PreAuthorize("hasRole('SEKOLAH')")
     @PostMapping(path = "/reset")
     public ResponseEntity<BaseResponse> resetSiswaStatus(
             @RequestBody UpdateStatusSiswaBulk request
@@ -225,6 +230,38 @@ public class SiswaController {
     public ResponseEntity<BaseResponse> loginSiswa(@RequestBody LoginSiswaRequest request){
 
         Siswa siswa = siswaService.loginSiswa(request);
+
+        SiswaLoginResponse siswaResponse = SiswaLoginResponse.builder()
+                .id(siswa.getId())
+                .nama(siswa.getNama())
+                .nis(siswa.getNis())
+                .email(siswa.getEmail())
+                .noHp(siswa.getNoHp())
+                .noHpOrtu(siswa.getNoHpOrtu())
+                .alamat(siswa.getAlamat())
+                .status(siswa.getStatus())
+                .tagihan(siswa.getTagihan())
+                .sekolah(siswa.getGolongan().getSekolah().getSekolah())
+                .urlLogo(siswa.getGolongan().getSekolah().getLogo().getUrl())
+                .golongan(siswa.getGolongan().getGolongan())
+                .spp(siswa.getGolongan().getSpp())
+                .isActive(siswa.getIsActive())
+                .createdAt(siswa.getCreatedAt())
+                .updatedAt(siswa.getUpdatedAt())
+                .build();
+
+        BaseResponse response = CommonResponse.<SiswaLoginResponse>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("successfully add data")
+                .data(siswaResponse)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping(path = "/bayar/{nis}")
+    public ResponseEntity<BaseResponse> getSiswaByNis(@PathVariable String nis){
+        Siswa siswa = siswaService.getByNis(nis);
 
         SiswaLoginResponse siswaResponse = SiswaLoginResponse.builder()
                 .id(siswa.getId())
